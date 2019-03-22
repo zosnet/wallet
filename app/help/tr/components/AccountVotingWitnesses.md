@@ -1,0 +1,1 @@
+[Taniklar](introduction/witness) zos'in blok üreticileridirler. İşlemlerin geçerliliklerini teyit eder ve ağın güvenliğini sağlarlar. Dilediğiniz kadar tanığa oy verebilirsiniz, hepsi aynı miktarda alır. Tanık tekliflerini buradan takip edebilirsiniz: [zostalk - Stakeholder Proposals Board](https://zostalk.org/index.php/board,75.0.html).

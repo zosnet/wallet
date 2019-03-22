@@ -1,0 +1,112 @@
+.el-transfer-panel {
+    background: #fff;
+    overflow: hidden;
+    max-height: 100%;
+    box-sizing: border-box;
+    position: relative;
+    text-align: left;
+}
+
+.el-transfer-panel .el-transfer-panel__header {
+    height: 40px;
+    line-height: 40px;
+    background: #f5f7fa;
+    margin: 0;
+    padding-left: 15px;
+    border-bottom: 1px solid #ebeef5;
+    box-sizing: border-box;
+    color: #000;
+}
+
+.el-transfer-panel__list {
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    height: 320px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.el-checkbox {
+    color: #606266;
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    display: block;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.el-transfer-panel .el-transfer-panel__header .el-checkbox .el-checkbox__label {
+    font-size: 16px;
+    color: #303133;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.el-transfer-panel__filter {
+    text-align: center;
+    margin: 15px;
+    box-sizing: border-box;
+    display: block;
+    width: auto;
+}
+
+.el-transfer-panel__filter .el-input__inner {
+    height: 32px;
+    width: 100%;
+    font-size: 12px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-bottom: 0;
+}
+
+.el-transfer-panel__item {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 15px;
+    display: block;
+    margin-bottom: 0;
+}
+.el-transfer-panel__item:nth-of-type(odd) {
+    background-color: #f9fbfe;
+}
+.el-transfer-panel__item:nth-of-type(even) {
+    background-color: #ffffff;
+}
+.el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #409eff;
+}
+.el-checkbox__label > span {
+    text-transform: initial;
+    font-weight: normal !important;
+}
+.el-transfer-panel__item.is-checked {
+    cursor: not-allowed;
+}
+.is-checked > .el-checkbox__label > span {
+    color: #c3c3c3;
+}
+.el-transfer-panel__item > .bitlender-remove {
+    color: #ffffff;
+    position: absolute;
+    right: 20px;
+}
+
+.el-transfer-panel__item > .bitlender-remove:hover,
+.el-transfer-panel__item > .bitlender-remove:active,
+.el-transfer-panel__item > .bitlender-remove:focus {
+    background: transparent;
+}
+
+.bitlender-commitee-symbol {
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    background: #f9fbfe;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: left;
+}

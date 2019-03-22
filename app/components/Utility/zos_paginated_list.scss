@@ -1,0 +1,482 @@
+.zos-paginated-list {
+}
+
+.zos-paginated-list .ant-pagination {
+    list-style: none;
+}
+.zos-paginated-list .ant-pagination:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.zos-paginated-list .ant-pagination {
+    font-family: Roboto Medium, Monospaced Number, Chinese Quote, -apple-system,
+        BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC, Hiragino Sans GB,
+        Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.zos-paginated-list .ant-pagination,
+.zos-paginated-list .ant-pagination ol,
+.zos-paginated-list .ant-pagination ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.zos-paginated-list .ant-pagination:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.zos-paginated-list .ant-pagination-item,
+.zos-paginated-list .ant-pagination-total-text {
+    display: inline-block;
+    vertical-align: middle;
+    height: 32px;
+    line-height: 30px;
+    margin-right: 8px;
+}
+
+.zos-paginated-list .ant-pagination-item {
+    cursor: pointer;
+    border-radius: 0;
+    user-select: none;
+    min-width: 32px;
+    text-align: center;
+    list-style: none;
+    border: 1px solid #656565;
+    background-color: #ffffff;
+    font-family: Arial;
+    outline: 0;
+}
+
+.zos-paginated-list .ant-pagination-item a {
+    text-decoration: none;
+    transition: none;
+    margin: 0 6px;
+}
+
+.zos-paginated-list .ant-pagination-item:focus,
+.zos-paginated-list .ant-pagination-item:hover {
+    transition: all 0.3s;
+    border-color: #00a9e0;
+}
+
+.zos-paginated-list .ant-pagination-item:focus a,
+.zos-paginated-list .ant-pagination-item:hover a {
+    color: #00a9e0;
+}
+
+.zos-paginated-list .ant-pagination-item-active {
+    border-color: #00a9e0;
+    font-weight: 500;
+}
+
+.zos-paginated-list .ant-pagination-item-active a {
+    color: #00a9e0;
+}
+
+.zos-paginated-list .ant-pagination-item-active:focus,
+.zos-paginated-list .ant-pagination-item-active:hover {
+    border-color: #26c2ed;
+}
+
+.zos-paginated-list .ant-pagination-item-active:focus a,
+.zos-paginated-list .ant-pagination-item-active:hover a {
+    color: #26c2ed;
+}
+
+.zos-paginated-list .ant-pagination-jump-next,
+.zos-paginated-list .ant-pagination-jump-prev {
+    outline: 0;
+}
+
+.zos-paginated-list .ant-pagination-jump-next:after,
+.zos-paginated-list .ant-pagination-jump-prev:after {
+    content: "...";
+    display: block;
+    letter-spacing: 2px;
+    color: #656565;
+    text-align: center;
+}
+
+.zos-paginated-list .ant-pagination-jump-next:focus:after,
+.zos-paginated-list .ant-pagination-jump-next:hover:after,
+.zos-paginated-list .ant-pagination-jump-prev:focus:after,
+.zos-paginated-list .ant-pagination-jump-prev:hover:after {
+    color: #00a9e0;
+    display: inline-block;
+    font-size: 12px;
+    font-size: 8px\9;
+    transform: scale(0.66666667) rotate(0deg);
+    letter-spacing: -1px;
+    font-family: anticon;
+}
+
+.zos-paginated-list :root .ant-pagination-jump-next:focus:after,
+.zos-paginated-list :root .ant-pagination-jump-next:hover:after,
+.zos-paginated-list :root .ant-pagination-jump-prev:focus:after,
+.zos-paginated-list :root .ant-pagination-jump-prev:hover:after {
+    font-size: 12px;
+}
+
+.zos-paginated-list .ant-pagination-jump-prev:focus:after,
+.zos-paginated-list .ant-pagination-jump-prev:hover:after {
+    content: "...";
+}
+
+.zos-paginated-list .ant-pagination-jump-next:focus:after,
+.zos-paginated-list .ant-pagination-jump-next:hover:after {
+    content: "...";
+}
+
+.zos-paginated-list .ant-pagination-jump-next,
+.zos-paginated-list .ant-pagination-jump-prev,
+.zos-paginated-list .ant-pagination-prev {
+    margin-right: 8px;
+}
+
+.zos-paginated-list .ant-pagination-jump-next,
+.zos-paginated-list .ant-pagination-jump-prev,
+.zos-paginated-list .ant-pagination-next,
+.zos-paginated-list .ant-pagination-prev {
+    font-family: Arial;
+    cursor: pointer;
+    border-radius: 0;
+    list-style: none;
+    min-width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    transition: all 0.3s;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.zos-paginated-list .ant-pagination-next,
+.zos-paginated-list .ant-pagination-prev {
+    outline: 0;
+}
+
+.zos-paginated-list .ant-pagination-next a,
+.zos-paginated-list .ant-pagination-prev a {
+    user-select: none;
+}
+
+.zos-paginated-list .ant-pagination-next:hover a,
+.zos-paginated-list .ant-pagination-prev:hover a {
+    border-color: #26c2ed;
+}
+
+.zos-paginated-list .ant-pagination-next .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-prev .ant-pagination-item-link {
+    border: 1px solid #656565;
+    background-color: #ffffff;
+    border-radius: 0;
+    outline: none;
+    display: block;
+    transition: all 0.3s;
+}
+
+.zos-paginated-list .ant-pagination-next .ant-pagination-item-link:after,
+.zos-paginated-list .ant-pagination-prev .ant-pagination-item-link:after {
+    font-size: 12px;
+    display: block;
+    height: 30px;
+    font-family: anticon;
+    text-align: center;
+    font-weight: 500;
+}
+
+.zos-paginated-list .ant-pagination-next:focus .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-next:hover .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-prev:focus .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-prev:hover .ant-pagination-item-link {
+    border-color: #00a9e0;
+}
+
+.zos-paginated-list .ant-pagination-prev .ant-pagination-item-link:after {
+    content: "<";
+    display: block;
+}
+
+.zos-paginated-list .ant-pagination-next .ant-pagination-item-link:after {
+    content: ">";
+    display: block;
+}
+
+.zos-paginated-list .ant-pagination-disabled,
+.zos-paginated-list .ant-pagination-disabled:focus,
+.zos-paginated-list .ant-pagination-disabled:hover {
+    cursor: not-allowed;
+}
+
+.zos-paginated-list .ant-pagination-disabled .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-disabled:focus .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-disabled:focus a,
+.zos-paginated-list .ant-pagination-disabled:hover .ant-pagination-item-link,
+.zos-paginated-list .ant-pagination-disabled:hover a,
+.zos-paginated-list .ant-pagination-disabled a {
+    border-color: #656565;
+    color: #656565;
+    cursor: not-allowed;
+}
+
+.zos-paginated-list .ant-pagination-slash {
+    margin: 0 10px 0 5px;
+}
+
+.zos-paginated-list .ant-pagination-options {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 16px;
+}
+
+.zos-paginated-list .ant-pagination-options-size-changer.ant-select {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper {
+    display: inline-block;
+    vertical-align: top;
+    height: 32px;
+    line-height: 32px;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input {
+    position: relative;
+    display: inline-block;
+    padding: 4px 11px;
+    width: 100%;
+    height: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #656565;
+    border-radius: 0;
+    transition: all 0.3s;
+    margin: 0 8px;
+    width: 50px;
+}
+
+.zos-paginated-list
+    .ant-pagination-options-quick-jumper
+    input::-moz-placeholder {
+    color: #656565;
+    opacity: 1;
+}
+
+.zos-paginated-list
+    .ant-pagination-options-quick-jumper
+    input:-ms-input-placeholder {
+    color: #656565;
+}
+
+.zos-paginated-list
+    .ant-pagination-options-quick-jumper
+    input::-webkit-input-placeholder {
+    color: #656565;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input:hover {
+    border-color: #c7bbbb;
+    border-right-width: 1px !important;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input:focus {
+    border-color: #26c2ed;
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(0, 169, 224, 0.2);
+    border-right-width: 1px !important;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input-disabled {
+    background-color: #656565;
+    opacity: 1;
+    cursor: not-allowed;
+    color: #656565;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input-disabled:hover {
+    border-color: #736c6c;
+    border-right-width: 1px !important;
+}
+
+.zos-paginated-list textarea.ant-pagination-options-quick-jumper input {
+    max-width: 100%;
+    height: auto;
+    vertical-align: bottom;
+    transition: all 0.3s, height 0s;
+    min-height: 32px;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input-lg {
+    padding: 6px 11px;
+    height: 40px;
+    font-size: 16px;
+}
+
+.zos-paginated-list .ant-pagination-options-quick-jumper input-sm {
+    padding: 1px 7px;
+    height: 24px;
+}
+
+.zos-paginated-list .ant-pagination-simple .ant-pagination-next,
+.zos-paginated-list .ant-pagination-simple .ant-pagination-prev {
+    height: 24px;
+    line-height: 24px;
+    vertical-align: top;
+}
+
+.zos-paginated-list
+    .ant-pagination-simple
+    .ant-pagination-next
+    .ant-pagination-item-link,
+.zos-paginated-list
+    .ant-pagination-simple
+    .ant-pagination-prev
+    .ant-pagination-item-link {
+    border: 0;
+    height: 24px;
+}
+
+.zos-paginated-list
+    .ant-pagination-simple
+    .ant-pagination-next
+    .ant-pagination-item-link:after,
+.zos-paginated-list
+    .ant-pagination-simple
+    .ant-pagination-prev
+    .ant-pagination-item-link:after {
+    height: 24px;
+    line-height: 24px;
+}
+
+.zos-paginated-list .ant-pagination-simple .ant-pagination-simple-pager {
+    display: inline-block;
+    margin-right: 8px;
+    height: 24px;
+}
+
+.zos-paginated-list .ant-pagination-simple .ant-pagination-simple-pager input {
+    margin-right: 8px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 0;
+    border: 1px solid #656565;
+    outline: none;
+    padding: 0 6px;
+    height: 100%;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+
+.zos-paginated-list
+    .ant-pagination-simple
+    .ant-pagination-simple-pager
+    input:hover {
+    border-color: #00a9e0;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-simple-pager,
+.zos-paginated-list .ant-pagination.mini .ant-pagination-total-text {
+    height: 24px;
+    line-height: 24px;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-item {
+    margin: 0;
+    min-width: 24px;
+    height: 24px;
+    line-height: 22px;
+}
+
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-item:not(.ant-pagination-item-active) {
+    background: 0 0;
+    border-color: #0000;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-next,
+.zos-paginated-list .ant-pagination.mini .ant-pagination-prev {
+    margin: 0;
+    min-width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-next
+    .ant-pagination-item-link,
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-prev
+    .ant-pagination-item-link {
+    border-color: #0000;
+    background: 0 0;
+}
+
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-next
+    .ant-pagination-item-link:after,
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-prev
+    .ant-pagination-item-link:after {
+    height: 24px;
+    line-height: 24px;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-jump-next,
+.zos-paginated-list .ant-pagination.mini .ant-pagination-jump-prev {
+    height: 24px;
+    line-height: 24px;
+    margin-right: 0;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-options {
+    margin-left: 2px;
+}
+
+.zos-paginated-list .ant-pagination.mini .ant-pagination-options-quick-jumper {
+    height: 24px;
+    line-height: 24px;
+}
+
+.zos-paginated-list
+    .ant-pagination.mini
+    .ant-pagination-options-quick-jumper
+    input {
+    padding: 1px 7px;
+    height: 24px;
+    width: 44px;
+}
+
+@media only screen and (max-width: 992px) {
+    .zos-paginated-list .ant-pagination-item-after-jump-prev,
+    .zos-paginated-list .ant-pagination-item-before-jump-next {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .zos-paginated-list .ant-pagination-options {
+        display: none;
+    }
+}

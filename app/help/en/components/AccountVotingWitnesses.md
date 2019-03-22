@@ -1,0 +1,1 @@
+[Witnesses](introduction/witness) are the block producers of zos. They validate transactions and ensure the safety of the network. You may vote for as many witnesses as you'd like, and they will all receive the same amount of votes. Witness proposals can be found here: [zostalk - Stakeholder Proposals Board](https://zostalk.org/index.php/board,75.0.html).

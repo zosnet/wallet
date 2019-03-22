@@ -1,0 +1,1 @@
+Bir vekil adınıza oy kullanımını yönetir. zos forumunda vekil olarak görev almaya gnüllü kişileri bulabilirsiniz  [zostalk](https://zostalk.org/index.php/board,75.0.html).

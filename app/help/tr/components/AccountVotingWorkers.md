@@ -1,0 +1,1 @@
+[İşçiler](introduction/workers) zos'e özgü bir kavramdır. İşçiler, blok zincirinin kendisinden aldıkları maaş karşılığında hizmet sağlayan tekliflerdir. Teklifin amacını açıklayan bir web veya forum bağlantısı teklifin içine dahil edilmelidir, teklifleri burada görebilirsiniz :  [zostalk - Stakeholder Proposals Board](https://zostalk.org/index.php/board,75.0.html).
