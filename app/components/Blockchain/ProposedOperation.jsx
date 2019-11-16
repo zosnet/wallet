@@ -173,7 +173,8 @@ class ProposedOperation extends React.Component {
             color = "info";
         let bitlender_option_asset_id = null;
 
-        // console.log(op);
+        //console.log(op);
+
         switch (
             ops[op[0]] // For a list of trx types, see chain_types.coffee
         ) {
@@ -1434,6 +1435,43 @@ class ProposedOperation extends React.Component {
                 );
                 break;
 
+            case "asset_locktoken":
+                column =
+                    Number(op[1].op_type) == 0 ? (
+                        <TranslateWithLinks
+                            string="operation.asset_locktoken_create_operation"
+                            keys={[
+                                {
+                                    type: "account",
+                                    value: op[1].issuer,
+                                    arg: "account"
+                                },
+                                {
+                                    type: "asset",
+                                    value: op[1].asset_lock,
+                                    arg: "asset"
+                                }
+                            ]}
+                        />
+                    ) : (
+                        <TranslateWithLinks
+                            string="operation.asset_locktoken_modify_operation"
+                            keys={[
+                                {
+                                    type: "account",
+                                    value: op[1].issuer,
+                                    arg: "account"
+                                },
+                                {
+                                    type: "asset",
+                                    value: op[1].asset_lock,
+                                    arg: "asset"
+                                }
+                            ]}
+                        />
+                    );
+                break;
+
             // others
             case "global_parameters_update":
                 column = (
@@ -1668,6 +1706,8 @@ class ProposedOperation extends React.Component {
                             asset={op[1].fee.asset_id}
                         />
                     </div>
+                    <div>{trxid}</div>
+                    <div>{block}</div>
                 </div>
             );
         }
@@ -1676,6 +1716,7 @@ class ProposedOperation extends React.Component {
             <Row
                 index={this.props.index}
                 id={this.props.id}
+                trxid={this.props.trxid}
                 block={block}
                 type={op[0]}
                 color={color}

@@ -82,6 +82,11 @@ class Explorer extends React.Component {
                     name: "block",
                     link: "/explorer/block/0",
                     translate: "explorer.block.tab_title"
+                },
+                {
+                    name: "balances",
+                    link: "/explorer/balances",
+                    translate: "explorer.balances.title"
                 }
             ]
         };

@@ -125,14 +125,16 @@ class BalanceHistory extends React.Component {
                     textContent(cn[0]),
                     textContent(cn[1]),
                     textContent(cn[2]),
-                    textContent(cn[3])
+                    textContent(cn[3]),
+                    textContent(cn[4]),
+                    textContent(cn[5])
                 ].join(",");
             }
             var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
             var today = new Date();
             saveAs(
                 blob,
-                "zoshist-" +
+                "zosbalances-" +
                     today.getFullYear() +
                     "-" +
                     ("0" + (today.getMonth() + 1)).slice(-2) +
@@ -367,6 +369,7 @@ class BalanceHistory extends React.Component {
                                           content={`balance_utypes.${o.utype}`}
                                       />
                                   </td>
+                                  <td>{o.info}</td>
                                   <td>
                                       <FormattedAsset
                                           amount={o.asset_op.amount}
@@ -608,6 +611,9 @@ class BalanceHistory extends React.Component {
                                         <Translate content="account.balance_history.utype" />
                                     </th>
                                     <th style={alignLeft}>
+                                        <Translate content="account.balance_history.info" />
+                                    </th>
+                                    <th style={alignLeft}>
                                         <Translate content="account.balance_history.asset_op" />
                                     </th>
                                     <th style={alignLeft}>
@@ -641,6 +647,7 @@ class BalanceHistory extends React.Component {
                             >
                                 <div>
                                     <div>UTYPE</div>
+                                    <div>INFO</div>
                                     <div>ASSET_OP</div>
                                     <div>BALANCE</div>
                                     <div>BLOCK_TIME</div>
@@ -656,6 +663,7 @@ class BalanceHistory extends React.Component {
                                                     }`}
                                                 />
                                             </div>
+                                            <div>{o.info}</div>
                                             <div>
                                                 <FormattedAsset
                                                     amount={o.asset_op.amount}

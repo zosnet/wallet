@@ -15,6 +15,7 @@ class BlockchainStore extends BaseStore {
         this.rpc_connection_status = null;
         this.no_ws_connection = false;
         this.blocksHeight = 0;
+        this.LastHeight = 0;
         this.blocksTrxid = "";
 
         this.bindListeners({
@@ -32,6 +33,7 @@ class BlockchainStore extends BaseStore {
 
     onGetBlock(block) {
         this.blocks = Immutable.Map();
+        this.LastHeight = block.id;
         if (!this.blocks.get(block.id)) {
             if (!/Z$/.test(block.timestamp)) {
                 block.timestamp += "Z";
@@ -44,6 +46,14 @@ class BlockchainStore extends BaseStore {
     onSetBlockAndTrxID({height, trid}) {
         this.blocksHeight = height;
         this.blocksTrxid = trid;
+    }
+    filterTrx(trx) {
+        //if (op[0] === "asset_publish_feed" || op[0] === "bitlender_publish_feed_operation" ) return null;
+        // console.log(trx);
+        if (trx.operations.length <= 0) return false;
+        if (trx.operations[0][0] === 19) return false;
+        if (trx.operations[0][0] === 86) return false;
+        return true;
     }
 
     onGetLatest(payload) {
@@ -62,11 +72,14 @@ class BlockchainStore extends BaseStore {
             }
 
             if (block.transactions.length > 0) {
-                block.transactions.forEach(trx => {
+                block.transactions.forEach((trx, index) => {
+                    trx.trxid = block.trxids[index];
                     trx.block_num = block.id;
-                    this.latestTransactions = this.latestTransactions.unshift(
-                        trx
-                    );
+                    if (this.filterTrx(trx)) {
+                        this.latestTransactions = this.latestTransactions.unshift(
+                            trx
+                        );
+                    }
                 });
             }
 

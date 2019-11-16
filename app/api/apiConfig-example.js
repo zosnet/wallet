@@ -16,6 +16,10 @@ export const rudexAPIs = {
     NEW_DEPOSIT_ADDRESS: "/new-deposit-address"
 };
 
+export const centerAPIs = {
+    CHAININFO: "https://chaininfo.zos.io/chainapi"
+};
+
 export const widechainAPIs = {
     BASE: "https://gateway.winex.pro/api/v0/ol/support",
     COINS_LIST: "/coins",

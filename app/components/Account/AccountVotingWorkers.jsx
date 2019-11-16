@@ -1200,9 +1200,11 @@ class AccountVoting extends React.Component {
                                                         }}
                                                     >
                                                         <Translate content="account.votes.total_last_income" />{" "}
-                                                        (<AssetName
+                                                        (
+                                                        <AssetName
                                                             name={preferredUnit}
-                                                        />)
+                                                        />
+                                                        )
                                                     </th>
                                                     <th
                                                         colSpan="5"
@@ -1276,9 +1278,11 @@ class AccountVoting extends React.Component {
                                                             fontSize: "0.8rem"
                                                         }}
                                                     >
-                                                        (<AssetName
+                                                        (
+                                                        <AssetName
                                                             name={preferredUnit}
-                                                        />)
+                                                        />
+                                                        )
                                                     </div>
                                                 </th>
 
@@ -1292,15 +1296,16 @@ class AccountVoting extends React.Component {
                                                             fontSize: "0.8rem"
                                                         }}
                                                     >
-                                                        (<AssetName
+                                                        (
+                                                        <AssetName
                                                             name={preferredUnit}
-                                                        />)
+                                                        />
+                                                        )
                                                     </div>
                                                 </th>
 
-                                                {workerTableIndex === 2 ||
-                                                workerTableIndex ===
-                                                    0 ? null : (
+                                                {workerTableIndex ===
+                                                0 ? null : (
                                                     <th
                                                         style={{
                                                             textAlign: "right"
@@ -1314,11 +1319,13 @@ class AccountVoting extends React.Component {
                                                                     "0.8rem"
                                                             }}
                                                         >
-                                                            (<AssetName
+                                                            (
+                                                            <AssetName
                                                                 name={
                                                                     preferredUnit
                                                                 }
-                                                            />)
+                                                            />
+                                                            )
                                                         </div>
                                                     </th>
                                                 )}
@@ -1364,11 +1371,13 @@ class AccountVoting extends React.Component {
                                                                     "0.8rem"
                                                             }}
                                                         >
-                                                            (<AssetName
+                                                            (
+                                                            <AssetName
                                                                 name={
                                                                     preferredUnit
                                                                 }
-                                                            />)
+                                                            />
+                                                            )
                                                         </div>
                                                     </th>
                                                 )}

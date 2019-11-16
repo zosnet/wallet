@@ -1208,6 +1208,9 @@ class AccountOverview extends React.Component {
                                     accountsList={Immutable.fromJS([
                                         account.get("id")
                                     ])}
+                                    includeOperationId={true}
+                                    includeHeight={true}
+                                    includeTrxid={true}
                                     compactView={false}
                                     showMore={true}
                                     fullHeight={true}

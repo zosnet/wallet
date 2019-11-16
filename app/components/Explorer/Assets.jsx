@@ -148,7 +148,12 @@ class Assets extends React.Component {
                 "lender",
                 "genesis",
                 "loan",
-                "core"
+                "core",
+                "loanoption",
+                "bit",
+                "sell",
+                "locktoken",
+                "locknode"
             ];
             let uasset_property_cls = [
                 "info",
@@ -168,13 +173,19 @@ class Assets extends React.Component {
                 })
                 .map(asset => {
                     let uasset_property = asset.uasset_property.toString(2);
+                    console.log("title3:", uasset_property);
                     uasset_property = uasset_property
                         .split("")
                         .reverse()
                         .map(function(c, i) {
                             let _value = Math.pow(2, i);
                             return c == "1" &&
-                                (_value == 1 || _value == 2 || _value == 8) ? (
+                                (_value == 1 ||
+                                    _value == 2 ||
+                                    _value == 8 ||
+                                    _value == 0x100 ||
+                                    _value == 0x200 ||
+                                    _value == 0x80) ? (
                                 <span
                                     key={`uasset_property_${c}_${i}`}
                                     style={{marginRight: "10px"}}
@@ -191,6 +202,7 @@ class Assets extends React.Component {
 
                     return (
                         <tr key={asset.symbol}>
+                            <td>{asset.id}</td>
                             <td>
                                 <Link to={`/asset/${asset.symbol}`}>
                                     <AssetName name={asset.symbol} />
@@ -236,7 +248,12 @@ class Assets extends React.Component {
                 "lender",
                 "genesis",
                 "loan",
-                "core"
+                "core",
+                "loanoption",
+                "bit",
+                "sell",
+                "locktoken",
+                "locknode"
             ];
             let uasset_property_cls = [
                 "info",
@@ -262,7 +279,12 @@ class Assets extends React.Component {
                         .map(function(c, i) {
                             let _value = Math.pow(2, i);
                             return c == "1" &&
-                                (_value == 1 || _value == 2 || _value == 8) ? (
+                                (_value == 1 ||
+                                    _value == 2 ||
+                                    _value == 8 ||
+                                    _value == 0x100 ||
+                                    _value == 0x200 ||
+                                    _value == 0x80) ? (
                                 <span
                                     key={`uasset_property_${c}_${i}`}
                                     style={{marginRight: "10px"}}
@@ -279,6 +301,7 @@ class Assets extends React.Component {
 
                     return (
                         <tr key={asset.symbol}>
+                            <td>{asset.id}</td>
                             <td>
                                 <Link to={`/asset/${asset.symbol}`}>
                                     <AssetName name={asset.symbol} />
@@ -324,7 +347,12 @@ class Assets extends React.Component {
                 "lender",
                 "genesis",
                 "loan",
-                "core"
+                "core",
+                "loanoption",
+                "bit",
+                "sell",
+                "locktoken",
+                "locknode"
             ];
             let uasset_property_cls = [
                 "info",
@@ -344,13 +372,19 @@ class Assets extends React.Component {
                 })
                 .map(asset => {
                     let uasset_property = asset.uasset_property.toString(2);
+                    console.log("title1:", uasset_property);
                     uasset_property = uasset_property
                         .split("")
                         .reverse()
                         .map(function(c, i) {
                             let _value = Math.pow(2, i);
                             return c == "1" &&
-                                (_value == 1 || _value == 2 || _value == 8) ? (
+                                (_value == 1 ||
+                                    _value == 2 ||
+                                    _value == 8 ||
+                                    _value == 0x100 ||
+                                    _value == 0x200 ||
+                                    _value == 0x80) ? (
                                 <span
                                     key={`uasset_property_${c}_${i}`}
                                     style={{marginRight: "10px"}}
@@ -367,6 +401,7 @@ class Assets extends React.Component {
 
                     return (
                         <tr key={asset.symbol}>
+                            <td>{asset.id}</td>
                             <td>
                                 <Link to={`/asset/${asset.symbol}`}>
                                     <AssetName name={asset.symbol} />
@@ -408,6 +443,9 @@ class Assets extends React.Component {
 
         let assetListHeader = (
             <tr>
+                <th>
+                    <Translate component="span" content="explorer.assets.id" />
+                </th>
                 <th>
                     <Translate
                         component="span"

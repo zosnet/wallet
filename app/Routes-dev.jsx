@@ -21,6 +21,7 @@ import BudgetMembers from "./components/Explorer/BudgetMembers";
 import Gateways from "./components/Explorer/Gateways";
 import Carriers from "./components/Explorer/Carriers";
 import Authors from "./components/Explorer/Authors";
+import BalancesSort from "./components/Explorer/BalancesSort";
 import Business from "./components/Business/Business";
 import BusinessExchangeContainer from "./components/Business/BusinessExchangeContainer";
 import BitlenderStatistics from "./components/Business/BitlenderStatistics";
@@ -132,6 +133,7 @@ const routes = (
         <Route path="/explorer/gateways" component={Gateways} />
         <Route path="/explorer/carriers" component={Carriers} />
         <Route path="/explorer/authors" component={Authors} />
+        <Route path="/explorer/balances" component={BalancesSort} />
         <Route path="/explorer/block/:height" component={BlockContainer}>
             <Route path=":trid" component={BlockContainer} />
         </Route>

@@ -1,5 +1,6 @@
 import WalletUnlockActions from "actions/WalletUnlockActions";
 import notify from "actions/NotificationActions";
+import PrivateKeyStore from "stores/PrivateKeyStore";
 import WalletDb from "stores/WalletDb";
 import {
     Aes,
@@ -16,6 +17,8 @@ const ApplicationApi = {
     create_account(
         owner_pubkey,
         active_pubkey,
+        memo_pubkey,
+        auth_pubkey,
         new_account_name,
         registrar,
         referrer,
@@ -63,8 +66,8 @@ const ApplicationApi = {
                         address_auths: []
                     },
                     options: {
-                        memo_key: active_pubkey,
-                        auth_key: active_pubkey, //20181119链上新增字段，初始穿件账户直接和memo_key一样就行了
+                        memo_key: memo_pubkey,
+                        auth_key: auth_pubkey,
                         voting_account: "1.2.5",
                         num_witness: 0,
                         num_committee: 0,
@@ -129,21 +132,33 @@ const ApplicationApi = {
                     chain_fee_asset
                 ] = res;
 
-                let memo_from_public, memo_to_public;
+                let enc_message = true;
+                let memo_from_public = null;
+                let memo_to_public = null;
                 if (memo && encrypt_memo) {
                     memo_from_public = chain_memo_sender.getIn([
                         "options",
                         "memo_key"
                     ]);
-
+                    //console.log(memo_from_public);
                     // The 1s are base58 for all zeros (null)
-                    if (/111111111111111111111/.test(memo_from_public)) {
-                        memo_from_public = null;
+                    if (
+                        /111111111111111111111/.test(memo_from_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_from_public
+                        )
+                    ) {
+                        enc_message = false;
                     }
-
                     memo_to_public = chain_to.getIn(["options", "memo_key"]);
-                    if (/111111111111111111111/.test(memo_to_public)) {
-                        memo_to_public = null;
+                    //console.log(memo_to_public);
+                    if (
+                        /111111111111111111111/.test(memo_to_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_to_public
+                        )
+                    ) {
+                        enc_message = false;
                     }
                 }
 
@@ -151,12 +166,11 @@ const ApplicationApi = {
                     ? chain_propose_account.get("id")
                     : null;
 
-                let memo_from_privkey;
-                if (encrypt_memo && memo) {
+                let memo_from_privkey = null;
+                if (encrypt_memo && memo && enc_message) {
                     memo_from_privkey = WalletDb.getPrivateKey(
                         memo_from_public
                     );
-
                     if (!memo_from_privkey) {
                         notify.addNotification({
                             message: counterpart.translate(
@@ -170,30 +184,48 @@ const ApplicationApi = {
                                 memo_sender
                         );
                     }
+                    if (
+                        optional_nonce !== null &&
+                        optional_nonce === "34359738367"
+                    ) {
+                        throw new Error("err nonce: " + optional_nonce);
+                    }
                 }
-
+                //console.log(encrypt_memo, enc_message);
                 let memo_object;
-                if (memo && memo_to_public && memo_from_public) {
-                    let nonce =
-                        optional_nonce == null
-                            ? TransactionHelper.unique_nonce_uint64()
-                            : optional_nonce;
+                if (memo && encrypt_memo) {
+                    if (enc_message) {
+                        let nonce =
+                            optional_nonce == null
+                                ? TransactionHelper.unique_nonce_uint64()
+                                : optional_nonce;
 
-                    memo_object = {
-                        from: memo_from_public,
-                        to: memo_to_public,
-                        nonce,
-                        message: encrypt_memo
-                            ? Aes.encrypt_with_checksum(
-                                  memo_from_privkey,
-                                  memo_to_public,
-                                  nonce,
-                                  memo
-                              )
-                            : Buffer.isBuffer(memo)
-                                ? memo.toString("utf-8")
-                                : memo
-                    };
+                        memo_object = {
+                            from: memo_from_public,
+                            to: memo_to_public,
+                            nonce,
+                            message: encrypt_memo
+                                ? Aes.encrypt_with_checksum(
+                                      memo_from_privkey,
+                                      memo_to_public,
+                                      nonce,
+                                      memo
+                                  )
+                                : Buffer.isBuffer(memo)
+                                    ? memo.toString("utf-8")
+                                    : memo
+                        };
+                    } else {
+                        // 明文标志
+                        let nonce = "34359738367";
+                        let sendtext = PrivateKeyStore.stringToByte(memo);
+                        memo_object = {
+                            from: memo_from_public,
+                            to: memo_to_public,
+                            nonce,
+                            message: sendtext
+                        };
+                    }
                 }
                 // Allow user to choose asset with which to pay fees #356
                 let fee_asset = chain_fee_asset.toJS();
@@ -287,12 +319,22 @@ const ApplicationApi = {
                     ]);
 
                     // The 1s are base58 for all zeros (null)
-                    if (/111111111111111111111/.test(memo_from_public)) {
+                    if (
+                        /111111111111111111111/.test(memo_from_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_from_public
+                        )
+                    ) {
                         memo_from_public = null;
                     }
 
                     memo_to_public = chain_to.getIn(["options", "memo_key"]);
-                    if (/111111111111111111111/.test(memo_to_public)) {
+                    if (
+                        /111111111111111111111/.test(memo_to_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_to_public
+                        )
+                    ) {
                         memo_to_public = null;
                     }
                 }
@@ -420,12 +462,22 @@ const ApplicationApi = {
                     ]);
 
                     // The 1s are base58 for all zeros (null)
-                    if (/111111111111111111111/.test(memo_from_public)) {
+                    if (
+                        /111111111111111111111/.test(memo_from_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_from_public
+                        )
+                    ) {
                         memo_from_public = null;
                     }
 
                     memo_to_public = chain_to.getIn(["options", "memo_key"]);
-                    if (/111111111111111111111/.test(memo_to_public)) {
+                    if (
+                        /111111111111111111111/.test(memo_to_public) ||
+                        /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                            memo_to_public
+                        )
+                    ) {
                         memo_to_public = null;
                     }
                 }

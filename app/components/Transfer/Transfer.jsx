@@ -15,6 +15,7 @@ import {ChainStore} from "zosjs/es";
 import {connect} from "alt-react";
 import {
     checkFeeStatusAsync,
+    checkMemoEncState,
     checkBalance,
     shouldPayFeeWithAssetAsync
 } from "common/trxHelper";
@@ -188,6 +189,23 @@ class Transfer extends React.Component {
             });
     }
 
+    _checkMemo(state = this.state) {
+        let {from_account, to_account} = state;
+        if (
+            !from_account ||
+            !from_account.get("id") ||
+            !to_account ||
+            !to_account.get("id")
+        )
+            return;
+        checkMemoEncState({
+            accountFromID: from_account.get("id"),
+            accountToID: to_account.get("id")
+        }).then(res => {
+            //console.log(res);
+        });
+    }
+
     _updateFee(state = this.state) {
         let {fee_asset_id, from_account, asset_id} = state;
         const {fee_asset_types} = this._getAvailableAssets(state);
@@ -239,11 +257,14 @@ class Transfer extends React.Component {
         this.setState({from_account, error: null}, () => {
             this._updateFee();
             this._checkFeeStatus();
+            this._checkMemo();
         });
     }
 
     onToAccountChanged(to_account) {
-        this.setState({to_account, error: null});
+        this.setState({to_account, error: null}, () => {
+            this._checkMemo();
+        });
     }
 
     onAmountChanged({amount, asset}) {
@@ -535,7 +556,7 @@ class Transfer extends React.Component {
                 <div style={{height: 10, background: "#f9fbfe"}} />
                 <div className="grid-block shrink vertical medium-horizontal">
                     <div
-                        className="grid-content small-12 medium-6 large-6"
+                        className="grid-content small-12 medium-4 large-4"
                         style={{paddingRight: 10}}
                     >
                         <form
@@ -604,8 +625,8 @@ class Transfer extends React.Component {
                                         asset_types.length > 0 && asset
                                             ? asset.get("id")
                                             : asset_id
-                                                ? asset_id
-                                                : asset_types[0]
+                                            ? asset_id
+                                            : asset_types[0]
                                     }
                                     assets={asset_types}
                                     display_balance={balance}
@@ -621,7 +642,14 @@ class Transfer extends React.Component {
                                 ) : null}
                             </div>
                             {/*  M E M O  */}
-                            <div className="content-block transfer-input">
+                            <div
+                                className="content-block transfer-input"
+                                style={{
+                                    marginLeft: 0,
+                                    marginRight: 0,
+                                    marginBottom: 20
+                                }}
+                            >
                                 {memo && memo.length ? (
                                     <label className="right-label">
                                         {memo.length}
@@ -637,7 +665,10 @@ class Transfer extends React.Component {
                                     )}
                                 />
                                 <textarea
-                                    style={{marginBottom: 0}}
+                                    style={{
+                                        marginBottom: 0,
+                                        resize: "none"
+                                    }}
                                     rows="3"
                                     value={memo}
                                     tabIndex={tabIndex++}
@@ -645,12 +676,17 @@ class Transfer extends React.Component {
                                 />
                                 {/* warning */}
                                 {this.state.propose ? (
-                                    <div
-                                        className="error-area"
-                                        style={{position: "absolute"}}
-                                    >
+                                    <div className="error-area">
                                         <Translate
                                             content="transfer.warn_name_unable_read_memo"
+                                            name={this.state.from_name}
+                                        />
+                                    </div>
+                                ) : null}
+                                {this.state.ret == 0 ? (
+                                    <div className="error-area">
+                                        <Translate
+                                            content="transfer.warn_name_unable_read_memo_tow"
                                             name={this.state.from_name}
                                         />
                                     </div>
@@ -674,10 +710,10 @@ class Transfer extends React.Component {
                                         fee_asset_types.length && feeAmount
                                             ? feeAmount.asset_id
                                             : fee_asset_types.length === 1
-                                                ? fee_asset_types[0]
-                                                : fee_asset_id
-                                                    ? fee_asset_id
-                                                    : fee_asset_types[0]
+                                            ? fee_asset_types[0]
+                                            : fee_asset_id
+                                            ? fee_asset_id
+                                            : fee_asset_types[0]
                                     }
                                     assets={fee_asset_types}
                                     tabIndex={tabIndex++}
@@ -770,13 +806,15 @@ class Transfer extends React.Component {
                     </div>
 
                     <div
-                        className="grid-content small-12 medium-6 large-6"
+                        className="grid-content small-12 medium-8 large-8"
                         style={{paddingLeft: 10}}
                     >
                         <div className="grid-content no-padding">
                             <RecentTransactions
                                 accountsList={accountsList}
                                 limit={25}
+                                includeHeight={true}
+                                includeTrxid={true}
                                 compactView={true}
                                 filter="transfer"
                                 fullHeight={true}

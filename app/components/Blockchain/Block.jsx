@@ -22,11 +22,12 @@ class TransactionList extends React.Component {
             transactions = [];
 
             block.transactions.forEach((trx, index) => {
-                let tr_buffer = ops.transaction.toBuffer(trx);
-                let tr_id = hash
-                    .sha256(tr_buffer)
-                    .toString("hex")
-                    .substring(0, 40);
+                // let tr_buffer = ops.transaction.toBuffer(trx);
+                // let tr_id = hash
+                //     .sha256(tr_buffer)
+                //     .toString("hex")
+                //     .substring(0, 40);
+                let tr_id = block.trxids[index];
                 transactions.push(
                     <Transaction
                         key={index}
@@ -79,7 +80,7 @@ class Block extends React.Component {
         // FetchChain("getObject", "2.1.0").then(res => {
         //     this.props.dynGlobalObject = res
         // })
-        if (this.props.height > 0) {
+        if (this.props.height >= 0) {
             this.setState(
                 {
                     input_height: this.props.height,
@@ -150,20 +151,22 @@ class Block extends React.Component {
     }
 
     _getBlock(height, trid, updateStore = false) {
-        if (height) {
-            height = parseInt(height, 10);
-            // if (!this.props.blocks.get(height)) {
-            //     BlockchainActions.getBlock(height);
-            // }
-            BlockchainActions.getBlock(height, trid);
-            if (updateStore) {
-                BlockchainStore.onSetBlockAndTrxID({height, trid});
-            }
-            this.setState({
-                search_height: height,
-                search_trxid: trid
-            });
+        console.log(height, trid);
+        //if (height) {
+        height = parseInt(height, 10);
+        // if (!this.props.blocks.get(height)) {
+        //     BlockchainActions.getBlock(height);
+        // }
+        BlockchainActions.getBlock(height, trid);
+        // height = this.props.block.id
+        if (updateStore) {
+            BlockchainStore.onSetBlockAndTrxID({height, trid});
         }
+        this.setState({
+            search_height: height,
+            search_trxid: trid
+        });
+        //}
     }
 
     _nextBlock() {
@@ -195,10 +198,15 @@ class Block extends React.Component {
 
     _onKeyDown(e) {
         if (e && e.keyCode === 13) {
-            const heightValue = this.refs.blockInput.value;
-            const tridValue = this.refs.trxidInput.value;
+            var heightValue = this.refs.blockInput.value;
+            var tridValue = this.refs.trxidInput.value;
+            console.log(heightValue, tridValue);
+            if (!heightValue && !tridValue) {
+                return;
+            }
             var url = "";
-            if (parseInt(heightValue) <= 0) {
+            if (!heightValue) heightValue = 0;
+            if (parseInt(heightValue) < 0) {
                 return;
             }
             if (heightValue) {
@@ -215,15 +223,25 @@ class Block extends React.Component {
     }
 
     _onSubmit() {
+        console.log(this.refs.blockInput.value, this.refs.trxidInput.value);
         this._onKeyDown({keyCode: 13});
         // this.props.router.push(`/block/${e.target.value}`);
     }
 
     render() {
+        if (
+            this.state.search_height === 0 &&
+            this.props.LastHeight !== this.state.search_height
+        ) {
+            this.state.input_height = this.props.LastHeight;
+            this.state.search_height = this.props.LastHeight;
+        }
         let {blocks} = this.props;
         let {search_height} = this.state;
         let height = parseInt(search_height, 10);
         let block = blocks.get(height);
+
+        //console.log(this.props, block, search_height)
 
         let blockInput = (
             <span>

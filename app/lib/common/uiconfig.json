@@ -1,0 +1,22 @@
+{
+    "chain": {
+        "core_asset": "ZOS",
+        "address_prefix": "ZOS",
+        "chain_id": "0d3bc516d8ad70c30ce07322297af7005b2d09075def0005b789226a1a9c1823"
+    },
+    "settingsAPIs": {
+        "DEFAULT_WS_NODE": "wss://node07.zosgateway.com:443",
+        "WS_NODE_LIST": [
+            {"url": "wss://node04.zostu.com:443", "location": "wss zos-s04"},
+            {"url": "wss://node05.zos.io:443", "location": "wss zos-s05"},
+            {
+                "url": "wss://node07.zosgateway.com:443",
+                "location": "wss zos-s07"
+            },
+            {"url": "wss://snode05.zos.io:443", "location": "wss zos-s05"}
+        ],
+        "DEFAULT_FAUCET": "https://faucet.zos.io:8443",
+        "TESTNET_FAUCET": "https://faucet.zos.io:8443",
+        "RPC_URL": "https://node04.zos.io:443"
+    }
+}

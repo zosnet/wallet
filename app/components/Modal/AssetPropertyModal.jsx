@@ -16,6 +16,9 @@ const ASSET_LOAN = 0x00000008; //8 ASSET_LOAN  可借贷
 //const ASSET_CORE: 0x00000010, //16,是否core资产(链内部使用)
 const ASSET_IS_LOAN_OR_LENDER = 0x00000020; //32, 是否设置了借贷属性(链内部使用)
 const ASSET_BIT = 0x00000040; //64 ASSET_BIT   数字货币
+const ASSET_SELL = 0x00000080; //64 ASSET_SELL   可交易
+const ASSET_LOCKTOKEN = 0x00000100; //
+const ASSET_LOCKNODE = 0x00000200; //
 
 class AssetPropertyModal extends React.Component {
     static propTypes = {
@@ -55,18 +58,17 @@ class AssetPropertyModal extends React.Component {
         let isAssetCash = uasset_prop & ASSET_CASH;
         let isAssetLender = uasset_prop & ASSET_LENDER;
         let isAssetLoan = uasset_prop & ASSET_LOAN;
-        let isAssetBit = uasset_prop & ASSET_BIT;
-        let isIsLoanOrLender = uasset_prop & ASSET_IS_LOAN_OR_LENDER;
+        let isAssetSell = uasset_prop & ASSET_SELL;
+        let isAssetLockToken = uasset_prop & ASSET_LOCKTOKEN;
 
-        if (isIsLoanOrLender) {
-            uasset_prop -= ASSET_IS_LOAN_OR_LENDER; //内部属性不能改动
-        }
-        //
-        let uasset_mask = 0;
-        if (isAssetCash) uasset_mask += ASSET_CASH;
-        if (isAssetLender) uasset_mask += ASSET_LENDER;
-        if (isAssetLoan) uasset_mask += ASSET_LOAN;
-        if (isAssetBit) uasset_mask += ASSET_BIT;
+        let uasset_mask =
+            ASSET_CASH |
+            ASSET_LENDER |
+            ASSET_LOAN |
+            ASSET_BIT |
+            ASSET_SELL |
+            ASSET_LOCKTOKEN;
+        uasset_prop &= uasset_mask;
 
         //根据修改类型判断弹出框标题
         let title = "global.apply";
@@ -75,17 +77,14 @@ class AssetPropertyModal extends React.Component {
                 title = "transaction.trxTypes.apply_asset_cash";
                 //申请为法币，必须要撤销数字货币
                 uasset_property = uasset_prop - ASSET_BIT + ASSET_CASH;
-                uasset_mask += ASSET_CASH;
             } else {
                 title = "transaction.trxTypes.cancel_asset_cash";
                 uasset_property = uasset_prop + ASSET_BIT - ASSET_CASH;
-                uasset_mask += ASSET_BIT;
             }
         } else if (property.assetType === ASSET_LENDER) {
             if (!isAssetLender) {
                 title = "transaction.trxTypes.apply_asset_lender";
                 uasset_property = uasset_prop + ASSET_LENDER;
-                uasset_mask += ASSET_LENDER;
             } else {
                 title = "transaction.trxTypes.cancel_asset_lender";
                 uasset_property = uasset_prop - ASSET_LENDER;
@@ -94,10 +93,25 @@ class AssetPropertyModal extends React.Component {
             if (!isAssetLoan) {
                 title = "transaction.trxTypes.apply_asset_loan";
                 uasset_property = uasset_prop + ASSET_LOAN;
-                uasset_mask += ASSET_LOAN;
             } else {
                 title = "transaction.trxTypes.cancel_asset_loan";
                 uasset_property = uasset_prop - ASSET_LOAN;
+            }
+        } else if (property.assetType === ASSET_SELL) {
+            if (!isAssetSell) {
+                title = "transaction.trxTypes.apply_asset_sell";
+                uasset_property = uasset_prop + ASSET_SELL;
+            } else {
+                title = "transaction.trxTypes.cancel_asset_sell";
+                uasset_property = uasset_prop - ASSET_SELL;
+            }
+        } else if (property.assetType === ASSET_LOCKTOKEN) {
+            if (!isAssetLockToken) {
+                title = "transaction.trxTypes.apply_asset_locktoken";
+                uasset_property = uasset_prop + ASSET_LOCKTOKEN;
+            } else {
+                title = "transaction.trxTypes.cancel_asset_locktoken";
+                uasset_property = uasset_prop - ASSET_LOCKTOKEN;
             }
         }
 

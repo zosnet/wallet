@@ -21,6 +21,9 @@ class BlockContainer extends React.Component {
                     },
                     storeTrxid: () => {
                         return BlockchainStore.getState().blocksTrxid;
+                    },
+                    LastHeight: () => {
+                        return BlockchainStore.getState().LastHeight;
                     }
                 }}
             >

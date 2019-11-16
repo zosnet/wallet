@@ -199,8 +199,9 @@ class AccountPermissions extends React.Component {
             updateObject.new_options.memo_key = s.memo_key;
         }
 
-        // console.log("-- AccountPermissions.onPublish -->", updateObject, s.memo_key);
         ApplicationApi.updateAccount(updateObject);
+
+        //console.log("-- AccountPermissions.onPublish -->", updateObject, s.memo_key);
     }
 
     isValidPubKey(value) {
@@ -263,7 +264,7 @@ class AccountPermissions extends React.Component {
         this.setState({memo_key});
     }
 
-    onSetPasswordKeys(keys, roles = ["active", "owner", "memo"]) {
+    onSetPasswordKeys(keys, roles = ["active", "owner", "memo", "author"]) {
         let newState = {};
 
         roles.forEach(role => {

@@ -41,7 +41,7 @@ class AuthorRow extends React.Component {
         ChainStore.FetchChain("getObject", author.allow_asset, 5000).then(
             res => {
                 let assets = [];
-                console.log("res:", res);
+                //console.log("res:", res);
                 res.forEach(obj => {
                     assets.push(obj.get("symbol"));
                 });

@@ -137,7 +137,9 @@ class Assets extends React.Component {
                         "_" +
                         (description.market
                             ? description.market
-                            : coreAsset ? coreAsset.get("symbol") : "ZOS");
+                            : coreAsset
+                                ? coreAsset.get("symbol")
+                                : "ZOS");
 
                     return (
                         <tr key={asset.symbol}>
@@ -178,23 +180,24 @@ class Assets extends React.Component {
         }
 
         if (activeFilter == "market") {
-            let uasset_property_names = [
-                "cash",
-                "lender",
-                "genesis",
-                "loan",
-                "core"
-            ];
-            let uasset_property_cls = [
-                "info",
-                "success",
-                "success",
-                "alert",
-                "alert"
-            ];
-
+            // let uasset_property_names = [
+            //     "cash",
+            //     "lender",
+            //     "genesis",
+            //     "loan",
+            //     "core",
+            //     "sell",
+            //     "locktoken",
+            //     "locknode"
+            // ];
+            // let uasset_property_cls = [
+            //     "info",
+            //     "success",
+            //     "success",
+            //     "alert",
+            //     "alert"
+            // ];
             // console.log(assets.toJS());
-
             //     mia = assets
             //         .filter(a => {
             //             return (
@@ -208,14 +211,12 @@ class Assets extends React.Component {
             //             let description = assetUtils.parseDescription(
             //                 asset.options.description
             //             );
-
             //             let marketID =
             //                 asset.symbol +
             //                 "_" +
             //                 (description.market
             //                     ? description.market
             //                     : coreAsset ? coreAsset.get("symbol") : "ZOS");
-
             //             let uasset_property = asset.uasset_property.toString(2);
             //             uasset_property = uasset_property
             //                 .split("")
@@ -240,7 +241,6 @@ class Assets extends React.Component {
             //                         ""
             //                     );
             //                 });
-
             //             return (
             //                 <tr key={asset.symbol}>
             //                     <td className="p-l-1_5">
@@ -316,7 +316,9 @@ class Assets extends React.Component {
                         "_" +
                         (description.market
                             ? description.market
-                            : coreAsset ? coreAsset.get("symbol") : "ZOS");
+                            : coreAsset
+                                ? coreAsset.get("symbol")
+                                : "ZOS");
 
                     return (
                         <tr key={asset.id.split(".")[2]}>
@@ -415,7 +417,9 @@ class Assets extends React.Component {
                         "_" +
                         (description.market
                             ? description.market
-                            : coreAsset ? coreAsset.get("symbol") : "ZOS");
+                            : coreAsset
+                                ? coreAsset.get("symbol")
+                                : "ZOS");
 
                     return (
                         <tr key={asset.id.split(".")[2]}>

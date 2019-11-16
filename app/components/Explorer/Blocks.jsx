@@ -311,9 +311,11 @@ class Blocks extends React.Component {
                 })
                 .take(20)
                 .map(trx => {
+                    //console.log(trx);
                     let opIndex = 0;
                     return trx.operations
                         .map(op => {
+                            //console.log(op);
                             if (trxIndex > 15) return null;
                             return (
                                 <Operation
@@ -321,6 +323,7 @@ class Blocks extends React.Component {
                                     op={op}
                                     result={trx.operation_results[opIndex++]}
                                     block={trx.block_num}
+                                    trxid={trx.trxid}
                                     hideFee={true}
                                     hideOpLabel={false}
                                     current={"1.2.0"}

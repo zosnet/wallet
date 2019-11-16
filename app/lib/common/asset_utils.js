@@ -90,7 +90,10 @@ export default class AssetUtils {
             asset_cash: false,
             asset_lender: false,
             asset_loan: false,
-            asset_bit: false
+            asset_bit: false,
+            asset_sell: false,
+            asset_locktoken: false,
+            asset_locknode: false
         };
         if (!uasset_property) return propertys;
         assetConstants.uasset_property_mask.map(property => {

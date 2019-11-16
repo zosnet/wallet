@@ -118,6 +118,12 @@ div.account-image {
 .right-label {
     float: right;
 }
+.right-label-red {
+    float: right;
+    span {
+        color: red !important;
+    }
+}
 
 div.transfer-input {
     //width: 100%;

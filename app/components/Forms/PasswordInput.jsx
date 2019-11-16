@@ -3,7 +3,8 @@ import {PropTypes, Component} from "react";
 import cname from "classnames";
 import Translate from "react-translate-component";
 import zxcvbnAsync from "zxcvbn-async";
-
+import {ChainValidation} from "zosjs/es";
+import counterpart from "counterpart";
 class PasswordInput extends Component {
     static propTypes = {
         onChange: PropTypes.func,
@@ -21,7 +22,7 @@ class PasswordInput extends Component {
         wrongPassword: false,
         noValidation: false,
         noLabel: false,
-        passwordLength: 8,
+        passwordLength: 40,
         checkStrength: false
     };
 
@@ -60,7 +61,29 @@ class PasswordInput extends Component {
             ) && this.state.value.length >= this.props.passwordLength
         );
     }
-
+    validatePassword(value) {
+        if (value === "") {
+            this.state.error = counterpart.translate(
+                "account.name_input.inValid"
+            );
+        } else {
+            let error = null;
+            let localePaths = ChainValidation.is_password_error(value);
+            if (localePaths) {
+                //console.log("error name", localePaths);
+                let localePath = localePaths.split(".");
+                if (localePath.length == 2) {
+                    error = counterpart.translate(
+                        "account.name_input." + localePath[0]
+                    );
+                    error += counterpart.translate(
+                        "account.name_input." + localePath[1]
+                    );
+                }
+            }
+            this.state.error = error;
+        }
+    }
     handleChange(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -99,11 +122,12 @@ class PasswordInput extends Component {
                 !(this.props.confirmation && doesnt_match) &&
                 confirmation &&
                 password.length >= this.props.passwordLength,
-            value: password,
+            value: password.trim(),
             score,
             doesnt_match
         };
         if (this.props.onChange) this.props.onChange(state);
+        this.validatePassword(password);
         this.setState(state);
     }
 
@@ -188,7 +212,9 @@ class PasswordInput extends Component {
                                 className={
                                     score === 5
                                         ? "high"
-                                        : score === 4 ? "medium" : "low"
+                                        : score === 4
+                                            ? "medium"
+                                            : "low"
                                 }
                                 value={score}
                                 max="5"

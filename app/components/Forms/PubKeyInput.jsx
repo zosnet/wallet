@@ -30,6 +30,14 @@ class PubKeyInput extends React.Component {
         return !!PublicKey.fromPublicKeyString(value);
     }
 
+    isEncPubKey(value) {
+        if (
+            /111111111111111111111/.test(value) ||
+            /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(value)
+        )
+            return false;
+        else return true;
+    }
     onInputChanged(event) {
         let value = event.target.value.trim();
         this.props.onChange(value);
@@ -75,9 +83,15 @@ class PubKeyInput extends React.Component {
                         {!error &&
                         this.props.value &&
                         this.isValidPubKey(this.props.value) ? (
-                            <label className="right-label">
-                                <Translate content="account.perm.valid_pub" />
-                            </label>
+                            this.isEncPubKey(this.props.value) ? (
+                                <label className="right-label">
+                                    <Translate content="account.perm.valid_pub" />
+                                </label>
+                            ) : (
+                                <label className="right-label-red">
+                                    <Translate content="account.perm.noenc_pub" />
+                                </label>
+                            )
                         ) : null}
                         <Translate
                             className="left-label"

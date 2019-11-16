@@ -66,12 +66,24 @@ class WalletActions {
             "active",
             password
         );
+        let {privKey: memo_private} = WalletDb.generateKeyFromPassword(
+            account_name,
+            "memo",
+            password
+        );
+        let {privKey: author_private} = WalletDb.generateKeyFromPassword(
+            account_name,
+            "author",
+            password
+        );
 
         return new Promise((resolve, reject) => {
             let create_account = () => {
                 return ApplicationApi.create_account(
                     owner_private.toPublicKey().toPublicKeyString(),
                     active_private.toPublicKey().toPublicKeyString(),
+                    memo_private.toPublicKey().toPublicKeyString(),
+                    author_private.toPublicKey().toPublicKeyString(),
                     account_name,
                     registrar, //registrar_id,
                     referrer, //referrer_id,
@@ -118,7 +130,10 @@ class WalletActions {
                                 active_key: active_private
                                     .toPublicKey()
                                     .toPublicKeyString(),
-                                memo_key: active_private
+                                memo_key: memo_private
+                                    .toPublicKey()
+                                    .toPublicKeyString(),
+                                auth_key: author_private
                                     .toPublicKey()
                                     .toPublicKeyString(),
                                 //"memo_key": memo_private.private_key.toPublicKey().toPublicKeyString(),
@@ -174,7 +189,8 @@ class WalletActions {
         }
         let owner_private = WalletDb.generateNextKey();
         let active_private = WalletDb.generateNextKey();
-        //let memo_private = WalletDb.generateNextKey()
+        let memo_private = WalletDb.generateNextKey();
+        let author_private = WalletDb.generateNextKey();
         let updateWallet = () => {
             let transaction = WalletDb.transaction_update_keys();
             let p = WalletDb.saveKeys(
@@ -189,6 +205,8 @@ class WalletActions {
             return ApplicationApi.create_account(
                 owner_private.private_key.toPublicKey().toPublicKeyString(),
                 active_private.private_key.toPublicKey().toPublicKeyString(),
+                memo_private.private_key.toPublicKey().toPublicKeyString(),
+                author_private.private_key.toPublicKey().toPublicKeyString(),
                 account_name,
                 registrar, //registrar_id,
                 referrer, //referrer_id,
@@ -234,6 +252,9 @@ class WalletActions {
                                 .toPublicKey()
                                 .toPublicKeyString(),
                             //"memo_key": memo_private.private_key.toPublicKey().toPublicKeyString(),
+                            auth_key: author_private.private_key
+                                .toPublicKey()
+                                .toPublicKeyString(),
                             refcode: refcode,
                             registrar: advanced_account_registrar,
                             referrer: referrer,

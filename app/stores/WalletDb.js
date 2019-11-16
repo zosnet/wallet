@@ -23,6 +23,11 @@ let aes_private = null;
 let _passwordKey = null;
 // let transaction;
 
+let memo_fixe_private = PrivateKey.fromWif(
+    "5K3DH7oDxHe6kKjuNFUHm2qQYuYYLm9ECsmUVm2Bf4cq6Ykr8fz"
+);
+let memo_fixe_public = memo_fixe_private.toPublicKey().toString();
+
 let TRACE = false;
 
 let dictJson, AesWorker;
@@ -108,6 +113,8 @@ class WalletDb extends BaseStore {
     decryptTcomb_PrivateKey(private_key_tcomb) {
         if (!private_key_tcomb) return null;
         if (this.isLocked()) throw new Error("wallet locked");
+        if (private_key_tcomb.pubkey === memo_fixe_public)
+            return memo_fixe_private;
         if (_passwordKey && _passwordKey[private_key_tcomb.pubkey]) {
             return _passwordKey[private_key_tcomb.pubkey];
         }
@@ -122,6 +129,7 @@ class WalletDb extends BaseStore {
         if (_passwordKey) return _passwordKey[public_key];
         if (!public_key) return null;
         if (public_key.Q) public_key = public_key.toPublicKeyString();
+        if (public_key === memo_fixe_public) return memo_fixe_private;
         let private_key_tcomb = PrivateKeyStore.getTcomb_byPubkey(public_key);
         if (!private_key_tcomb) return null;
         return this.decryptTcomb_PrivateKey(private_key_tcomb);
@@ -132,7 +140,7 @@ class WalletDb extends BaseStore {
             "passwordLogin"
         );
 
-        console.log("WalletDb.process_transaction: ", tr);
+        //console.log("WalletDb.process_transaction: ", tr, broadcast);
 
         if (
             !passwordLogin &&
@@ -147,13 +155,13 @@ class WalletDb extends BaseStore {
 
         return WalletUnlockActions.unlock()
             .then(() => {
-                console.log("WalletUnlockActions.unlock().then()");
+                //console.log("WalletUnlockActions.unlock().then()");
                 AccountActions.tryToSetCurrentAccount();
                 return Promise.all([
                     tr.set_required_fees(),
                     tr.update_head_block()
                 ]).then(() => {
-                    console.log("WalletUnlockActions.Promise.all().then(()");
+                    //console.log("WalletUnlockActions.Promise.all().then(()");
                     let signer_pubkeys_added = {};
                     if (signer_pubkeys) {
                         // Balance claims are by address, only the private
@@ -193,17 +201,12 @@ class WalletDb extends BaseStore {
                             return tr
                                 .get_required_signatures(my_pubkeys)
                                 .then(required_pubkeys => {
-                                    console.log(
-                                        "required_pubkeys",
-                                        required_pubkeys
-                                    );
                                     for (let pubkey_string of required_pubkeys) {
                                         if (signer_pubkeys_added[pubkey_string])
                                             continue;
                                         let private_key = this.getPrivateKey(
                                             pubkey_string
                                         );
-                                        console.log("private_key", private_key);
                                         if (!private_key)
                                             // This should not happen, get_required_signatures will only
                                             // returned keys from my_pubkeys
@@ -221,10 +224,6 @@ class WalletDb extends BaseStore {
                         .then(() => {
                             if (broadcast) {
                                 if (this.confirm_transactions) {
-                                    console.log(
-                                        "tr:",
-                                        JSON.stringify(tr.serialize())
-                                    );
                                     let p = new Promise((resolve, reject) => {
                                         TransactionConfirmActions.confirm(
                                             tr,
@@ -402,7 +401,7 @@ class WalletDb extends BaseStore {
         password,
         unlock = false,
         account = null,
-        roles = ["active", "owner", "memo"]
+        roles = ["active", "owner", "memo", "author"]
     ) {
         if (account) {
             let id = 0;
@@ -418,7 +417,15 @@ class WalletDb extends BaseStore {
                     id,
                     brainkey_sequence: null
                 });
+                //console.log(role, priv, pub);
             }
+
+            //特殊私钥不能登陆
+            if (
+                password ===
+                "5K3DH7oDxHe6kKjuNFUHm2qQYuYYLm9ECsmUVm2Bf4cq6Ykr8fz"
+            )
+                return false;
 
             /* Check if the user tried to login with a private key */
             let fromWif;
@@ -440,15 +447,36 @@ class WalletDb extends BaseStore {
                     key = this.generateKeyFromPassword(account, role, password);
                 }
 
-                let foundRole = false;
-
                 if (acc) {
-                    if (role === "memo") {
+                    if (role === "author") {
+                        if (acc.getIn(["options", "auth_key"]) === key.pubKey) {
+                            setKey(role, key.privKey, key.pubKey);
+                        }
+                    } else if (role === "memo") {
                         if (acc.getIn(["options", "memo_key"]) === key.pubKey) {
                             setKey(role, key.privKey, key.pubKey);
-                            foundRole = true;
+                        }
+                        if (acc.getIn(["options", "auth_key"]) === key.pubKey) {
+                            setKey("author", key.privKey, key.pubKey);
                         }
                     } else {
+                        let foundRole = false;
+
+                        if (role === "active") {
+                            if (
+                                acc.getIn(["options", "memo_key"]) ===
+                                key.pubKey
+                            ) {
+                                setKey("memo", key.privKey, key.pubKey);
+                            }
+                            if (
+                                acc.getIn(["options", "auth_key"]) ===
+                                key.pubKey
+                            ) {
+                                setKey("author", key.privKey, key.pubKey);
+                            }
+                        }
+
                         acc.getIn([role, "key_auths"]).forEach(auth => {
                             if (auth.get(0) === key.pubKey) {
                                 setKey(role, key.privKey, key.pubKey);
@@ -497,6 +525,15 @@ class WalletDb extends BaseStore {
                     return {success: true, cloudMode: false};
                 }
             }
+            // if (setkey > 0) {
+            //     let memo_fixe_private = PrivateKey.fromWif(
+            //         "5K3DH7oDxHe6kKjuNFUHm2qQYuYYLm9ECsmUVm2Bf4cq6Ykr8fz"
+            //     );
+            //     let memo_fixe_public = memo_fixe_private
+            //         .toPublicKey()
+            //         .toString();
+            //     setKey("memo", memo_fixe_private, memo_fixe_public);
+            // }
 
             return {success: !!_passwordKey, cloudMode: true};
         } else {

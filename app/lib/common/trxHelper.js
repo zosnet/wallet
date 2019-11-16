@@ -45,6 +45,46 @@ function checkFeePoolAsync({
     });
 }
 
+function checkMemoEncState({accountFromID, accountToID} = {}) {
+    return new Promise((res, rej) => {
+        Promise.all([
+            FetchChain("getAccount", accountFromID, 5000),
+            FetchChain("getAccount", accountToID, 5000)
+        ]).then(resget => {
+            let [accountFrom, accountTo] = resget;
+            let enc_msg = 1;
+            try {
+                let memo_from_public = accountFrom.getIn([
+                    "options",
+                    "memo_key"
+                ]);
+
+                if (
+                    /111111111111111111111/.test(memo_from_public) ||
+                    /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                        memo_from_public
+                    )
+                ) {
+                    enc_msg = 0;
+                }
+                let memo_to_public = accountTo.getIn(["options", "memo_key"]);
+                if (
+                    /111111111111111111111/.test(memo_to_public) ||
+                    /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                        memo_to_public
+                    )
+                ) {
+                    enc_msg = 0;
+                }
+            } catch (error) {
+                console.log(error);
+                enc_msg = 2;
+            }
+            res({ret: enc_msg});
+        });
+    });
+}
+
 function checkFeeStatusAsync({
     accountID,
     feeID = "1.3.0",
@@ -141,7 +181,7 @@ function checkFeeStatusAsync({
     });
 }
 
-const privKey = "5KikQ23YhcM7jdfHbFBQg1G7Do5y6SgD9sdBZq7BqQWXmNH7gqo";
+const privKey = "5J6pEviwZGj5XUAZgZdBDdCDVHpLu1HneeLYp3ciof3xQmVXF8b";
 const nonce = TransactionHelper.unique_nonce_uint64();
 let _privKey;
 let _cachedMessage, _prevContent;
@@ -181,11 +221,11 @@ function estimateFee(op_type, options, globalObject, data = {}) {
                     let pKey = _privKey || PrivateKey.fromWif(privKey);
                     if (_privKey) _privKey = pKey;
                     let memoFromKey =
-                        "BTS6B1taKXkDojuC1qECjvC7g186d8AdeGtz8wnqWAsoRGC6RY8Rp";
+                        "ZOS8d7wisspbNVjqnydBbCqyXYe7TsxewVev3cdHEwtnjjcU5Uz8q";
 
                     // Memos are optional, but if you have one you need to encrypt it
                     let memoToKey =
-                        "BTS8eLeqSZZtB1YHdw7KjQxRSRmaKAseCxhUSqaLxUdqvdGpp6nck";
+                        "ZOS7dBXdPi4yJJ4EcdVvoz65wChAE6PPPDidadwdZmoc2qMyDsZbZ";
 
                     /* Encryption is very expensive so we cache the result for reuse */
                     let message;
@@ -212,7 +252,7 @@ function estimateFee(op_type, options, globalObject, data = {}) {
                         ops.memo_data.toHex(serialized)
                     );
                     const byteLength = Buffer.byteLength(stringified, "hex");
-                    fee += optionFee * byteLength / 1024;
+                    fee += (optionFee * byteLength) / 1024;
 
                     _prevContent = data.content;
                 }
@@ -223,8 +263,7 @@ function estimateFee(op_type, options, globalObject, data = {}) {
     }
     // console.timeEnd("estimateFee");
     fee =
-        fee *
-        globalObject.getIn(["parameters", "current_fees", "scale"]) /
+        (fee * globalObject.getIn(["parameters", "current_fees", "scale"])) /
         10000;
     _feeCache[cacheKey] = fee;
     setTimeout(() => {
@@ -279,6 +318,7 @@ export {
     estimateFeeAsync,
     checkFeePoolAsync,
     checkFeeStatusAsync,
+    checkMemoEncState,
     checkBalance,
     shouldPayFeeWithAssetAsync
 };

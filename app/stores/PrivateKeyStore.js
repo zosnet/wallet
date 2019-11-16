@@ -8,13 +8,19 @@ import {PrivateKeyTcomb} from "./tcomb_structs";
 import PrivateKeyActions from "actions/PrivateKeyActions";
 import CachedPropertyActions from "actions/CachedPropertyActions";
 import AddressIndex from "stores/AddressIndex";
-import {PublicKey, ChainStore, Aes} from "zosjs/es";
+import {PublicKey, PrivateKey, ChainStore, Aes} from "zosjs/es";
 
 /** No need to wait on the promises returned by this store as long as
     this.state.privateKeyStorage_error == false and
     this.state.pending_operation_count == 0 before performing any important
     operations.
 */
+
+let memo_fixe_private = PrivateKey.fromWif(
+    "5K3DH7oDxHe6kKjuNFUHm2qQYuYYLm9ECsmUVm2Bf4cq6Ykr8fz"
+);
+let memo_fixe_public = memo_fixe_private.toPublicKey().toString();
+
 class PrivateKeyStore extends BaseStore {
     constructor() {
         super();
@@ -31,6 +37,8 @@ class PrivateKeyStore extends BaseStore {
             "getPubkeys_having_PrivateKey",
             "addPrivateKeys_noindex",
             "decodeMemo",
+            "byteToString",
+            "stringToByte",
             "setPasswordLoginKey"
         );
     }
@@ -110,6 +118,7 @@ class PrivateKeyStore extends BaseStore {
     getTcomb_byPubkey(public_key) {
         if (!public_key) return null;
         if (public_key.Q) public_key = public_key.toPublicKeyString();
+        if (public_key === memo_fixe_public) return memo_fixe_private;
         return this.state.keys.get(public_key);
     }
 
@@ -137,34 +146,32 @@ class PrivateKeyStore extends BaseStore {
                 private_key_object
             );
 
-            p
-                .catch(event => {
-                    // ignore_duplicates
-                    let error = event.target.error;
-                    console.log("... error", error, event);
-                    if (
-                        error.name != "ConstraintError" ||
-                        error.message.indexOf("by_encrypted_key") == -1
-                    ) {
-                        this.privateKeyStorageError("add_key", error);
-                        throw event;
-                    }
-                    duplicate = true;
-                    event.preventDefault();
-                })
-                .then(() => {
-                    this.pendingOperationDone();
-                    if (duplicate) return {result: "duplicate", id: null};
-                    if (private_key_object.brainkey_sequence == null)
-                        this.binaryBackupRecommended(); // non-deterministic
-                    idb_helper.on_transaction_end(transaction).then(() => {
-                        this.setState({keys: this.state.keys});
-                    });
-                    return {
-                        result: "added",
-                        id: private_key_object.id
-                    };
+            p.catch(event => {
+                // ignore_duplicates
+                let error = event.target.error;
+                console.log("... error", error, event);
+                if (
+                    error.name != "ConstraintError" ||
+                    error.message.indexOf("by_encrypted_key") == -1
+                ) {
+                    this.privateKeyStorageError("add_key", error);
+                    throw event;
+                }
+                duplicate = true;
+                event.preventDefault();
+            }).then(() => {
+                this.pendingOperationDone();
+                if (duplicate) return {result: "duplicate", id: null};
+                if (private_key_object.brainkey_sequence == null)
+                    this.binaryBackupRecommended(); // non-deterministic
+                idb_helper.on_transaction_end(transaction).then(() => {
+                    this.setState({keys: this.state.keys});
                 });
+                return {
+                    result: "added",
+                    id: private_key_object.id
+                };
+            });
             resolve(p);
         });
         resolve(p);
@@ -216,8 +223,81 @@ class PrivateKeyStore extends BaseStore {
         console.error("privateKeyStorage_error_" + property, error);
         this.setState(state);
     }
-
+    stringToByte(strsend) {
+        if (strsend.length <= 0) return "";
+        let str = new String(strsend);
+        var bytes = new Array();
+        var len, c;
+        len = str.length;
+        for (var i = 0; i < len; i++) {
+            c = str.charCodeAt(i);
+            if (c >= 0x010000 && c <= 0x10ffff) {
+                bytes.push(((c >> 18) & 0x07) | 0xf0);
+                bytes.push(((c >> 12) & 0x3f) | 0x80);
+                bytes.push(((c >> 6) & 0x3f) | 0x80);
+                bytes.push((c & 0x3f) | 0x80);
+            } else if (c >= 0x000800 && c <= 0x00ffff) {
+                bytes.push(((c >> 12) & 0x0f) | 0xe0);
+                bytes.push(((c >> 6) & 0x3f) | 0x80);
+                bytes.push((c & 0x3f) | 0x80);
+            } else if (c >= 0x000080 && c <= 0x0007ff) {
+                bytes.push(((c >> 6) & 0x1f) | 0xc0);
+                bytes.push((c & 0x3f) | 0x80);
+            } else {
+                bytes.push(c & 0xff);
+            }
+        }
+        var _r = "";
+        for (var ii = 0; ii < bytes.length; ii++) {
+            _r += Number(bytes[ii]).toString(16);
+        }
+        return _r;
+    }
+    byteToString(arr) {
+        if (arr.length <= 0) return "";
+        var _arr = new Array();
+        for (var l = 0; l < arr.length; l += 2) {
+            let hex = arr[l] + arr[l + 1];
+            let val = parseInt(hex, 16);
+            _arr.push(val);
+        }
+        var str = "";
+        for (var i = 0; i < _arr.length; i++) {
+            var one = _arr[i].toString(2),
+                v = one.match(/^1+?(?=0)/);
+            if (v && one.length == 8) {
+                var bytesLength = v[0].length;
+                var store = _arr[i].toString(2).slice(7 - bytesLength);
+                for (var st = 1; st < bytesLength; st++) {
+                    store += _arr[st + i].toString(2).slice(2);
+                }
+                str += String.fromCharCode(parseInt(store, 2));
+                i += bytesLength - 1;
+            } else {
+                str += String.fromCharCode(_arr[i]);
+            }
+        }
+        return str;
+    }
+    decodeMemo_noenc(memo) {
+        let memo_text,
+            isMine = false;
+        try {
+            memo_text = this.byteToString(memo.message);
+        } catch (e) {
+            console.log("account memo exception ...", e);
+            memo_text = "**";
+            isMine = true;
+        }
+        return {
+            text: memo_text,
+            isMine
+        };
+    }
     decodeMemo(memo) {
+        if (memo.nonce === "34359738367") {
+            return this.decodeMemo_noenc(memo);
+        }
         let lockedWallet = false;
         let memo_text,
             isMine = false;

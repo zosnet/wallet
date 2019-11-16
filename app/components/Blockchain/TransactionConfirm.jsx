@@ -291,6 +291,7 @@ class TransactionConfirm extends React.Component {
                                 key={Date.now()}
                                 trx={this.props.transaction.serialize()}
                                 index={0}
+                                trId={"0"}
                                 no_links={true}
                             />
                         </div>
@@ -352,13 +353,16 @@ class TransactionConfirm extends React.Component {
     }
 }
 
-TransactionConfirm = connect(TransactionConfirm, {
-    listenTo() {
-        return [TransactionConfirmStore];
-    },
-    getProps() {
-        return TransactionConfirmStore.getState();
+TransactionConfirm = connect(
+    TransactionConfirm,
+    {
+        listenTo() {
+            return [TransactionConfirmStore];
+        },
+        getProps() {
+            return TransactionConfirmStore.getState();
+        }
     }
-});
+);
 
 export default TransactionConfirm;

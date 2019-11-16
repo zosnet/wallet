@@ -110,9 +110,54 @@ class Row extends React.Component {
                             paddingLeft: 15
                         }}
                     >
-                        {this.props.operationId}
+                        <Link
+                            className="inline-block"
+                            data-place="bottom"
+                            to={`/explorer/block/${this.props.block}/${
+                                this.props.trxid
+                            }`}
+                        >
+                            {this.props.operationId}
+                        </Link>
                     </td>
                 ) : null}
+
+                {this.props.includeHeight ? (
+                    <td
+                        style={{
+                            textAlign: "left",
+                            paddingLeft: 15
+                        }}
+                    >
+                        <Link
+                            className="inline-block"
+                            data-place="bottom"
+                            to={`/explorer/block/${this.props.block}`}
+                        >
+                            {this.props.block}
+                        </Link>
+                    </td>
+                ) : null}
+
+                {this.props.includeTrxid ? (
+                    <td
+                        style={{
+                            textAlign: "left",
+                            paddingLeft: 15
+                        }}
+                    >
+                        <Link
+                            className="inline-block"
+                            data-place="bottom"
+                            to={`/explorer/block/${this.props.block}/${
+                                this.props.trxid
+                            }`}
+                        >
+                            {this.props.trxid}
+                        </Link>
+                    </td>
+                ) : null}
+
                 {hideOpLabel ? null : (
                     <td
                         style={{
@@ -133,7 +178,9 @@ class Row extends React.Component {
                                     )
                                 }
                             )}
-                            to={`/explorer/block/${this.props.block}`}
+                            to={`/explorer/block/${this.props.block}/${
+                                this.props.trxid
+                            }`}
                         >
                             <TransactionLabel color={color} type={type} />
                         </Link>
@@ -225,7 +272,7 @@ class Operation extends React.Component {
     }
 
     render() {
-        let {op, current, block, result} = this.props;
+        let {op, current, block, trxid, block_num, result} = this.props;
         let line = null,
             column = null,
             color = "info";
@@ -1932,6 +1979,20 @@ class Operation extends React.Component {
                     />
                 );
                 break;
+            case "bitlender_option_fee_mode":
+                column = (
+                    <TranslateWithLinks
+                        string="operation.bitlender_option_fee_mode"
+                        keys={[
+                            {
+                                type: "account",
+                                value: op[1].issuer,
+                                arg: "issuer"
+                            }
+                        ]}
+                    />
+                );
+                break;
 
             // case "bitlender_update_feed_producers_operation":
             // case "bitlender_test_operation":
@@ -1942,7 +2003,9 @@ class Operation extends React.Component {
                 // console.log("unimplemented op:", op);
                 column = (
                     <span>
-                        <Link to={`/explorer/block/${block}`}>#{block}</Link>
+                        <Link to={`/explorer/block/${block}/${trxid}`}>
+                            #{block}
+                        </Link>
                     </span>
                 );
         }
@@ -1966,6 +2029,8 @@ class Operation extends React.Component {
                             asset={op[1].fee.asset_id}
                         />
                     </div>
+                    <div>{trxid}</div>
+                    <div>{block}</div>
                 </div>
             );
         }
@@ -1973,7 +2038,10 @@ class Operation extends React.Component {
         line = column ? (
             <Row
                 operationId={this.props.operationId}
+                trxid={this.props.trxid}
                 includeOperationId={this.props.includeOperationId}
+                includeHeight={this.props.includeHeight}
+                includeTrxid={this.props.includeTrxid}
                 block={block}
                 type={op[0]}
                 color={color}

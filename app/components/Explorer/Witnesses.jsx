@@ -573,7 +573,7 @@ class Witnesses extends React.Component {
                                                 <FormattedAsset
                                                     amount={
                                                         dynGlobalObject
-                                                            .miner_budget[0]
+                                                            .miners_budget[0]
                                                     }
                                                     asset="1.3.0"
                                                 />

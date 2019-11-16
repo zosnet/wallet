@@ -61,7 +61,7 @@ class CreateAccount extends React.Component {
     }
 
     isValid() {
-        let firstAccount = AccountStore.getMyAccounts().length === 0;
+        let firstAccount = true; //AccountStore.getMyAccounts().length === 0;
         let valid = this.state.validAccountName;
         if (!WalletDb.getWallet()) {
             valid = valid && this.state.validPassword;
@@ -297,7 +297,7 @@ class CreateAccount extends React.Component {
         let {registrar_account, advanced_account_registrar} = this.state;
 
         let my_accounts = AccountStore.getMyAccounts();
-        let firstAccount = my_accounts.length === 0;
+        let firstAccount = true; //my_accounts.length === 0;
         let hasWallet = WalletDb.getWallet();
         let valid = this.isValid();
         let isLTM = false;
@@ -466,7 +466,7 @@ class CreateAccount extends React.Component {
     _renderAccountCreateText() {
         let hasWallet = WalletDb.getWallet();
         let my_accounts = AccountStore.getMyAccounts();
-        let firstAccount = my_accounts.length === 0;
+        let firstAccount = true; //my_accounts.length === 0;
 
         return (
             <div className="confirm-checks">

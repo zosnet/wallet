@@ -112,6 +112,9 @@ export default class AccountChangePassword extends React.Component {
                     <p>
                         <Translate unsafe content="wallet.password_model_2" />
                     </p>
+                    <p style={{fontWeight: "bold", color: "red"}}>
+                        <Translate content="wallet.password_model_4" />
+                    </p>
                 </div>
 
                 <div className="divider" />
@@ -137,7 +140,7 @@ export default class AccountChangePassword extends React.Component {
                         confirmation={true}
                         onChange={this.onPasswordChange.bind(this)}
                         noLabel
-                        passwordLength={12}
+                        passwordLength={40}
                         checkStrength
                     />
                 </form>

@@ -1,5 +1,6 @@
 import alt from "alt-instance";
 import {Apis} from "zosjs-ws";
+import {centerAPIs} from "api/apiConfig";
 
 let latestBlocks = {};
 
@@ -11,7 +12,7 @@ class BlockchainActions {
                 latestBlocks[height] = true;
                 Apis.instance()
                     .db_api()
-                    .exec("get_block", [height])
+                    .exec("get_block_ids", [height])
                     .then(result => {
                         if (!result) {
                             return;
@@ -32,11 +33,36 @@ class BlockchainActions {
     }
 
     getBlock(height, trid) {
-        if (!trid) {
+        if (!height || height == 0) {
+            return dispatch => {
+                let url =
+                    centerAPIs.CHAININFO + "/chain/api/blockinfo?txid=" + trid;
+                fetch(url)
+                    .then(result => {
+                        if (!result) {
+                            return false;
+                        }
+                        result.json().then(data => {
+                            if (!data || data.code == 400) {
+                                return false;
+                            }
+                            height = data.data.height;
+                            data.data.id = data.data.height; // The returned object for some reason does not include the block height..
+                            dispatch(data.data);
+                        });
+                    })
+                    .catch(error => {
+                        console.log(
+                            "Error in BlockchainActions.getBlock: ",
+                            error
+                        );
+                    });
+            };
+        } else if (!trid) {
             return dispatch => {
                 Apis.instance()
                     .db_api()
-                    .exec("get_block", [height])
+                    .exec("get_block_ids", [height])
                     .then(result => {
                         if (!result) {
                             return false;

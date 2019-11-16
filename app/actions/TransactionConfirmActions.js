@@ -21,6 +21,7 @@ class TransactionConfirmActions {
                 });
                 if (reject) reject();
             }, ChainConfig.expire_in_secs * 2000);
+            //console.log(transaction);
 
             transaction
                 .broadcast(() => {

@@ -76,7 +76,7 @@ class CreateAccountPassword extends React.Component {
     }
 
     isValid() {
-        let firstAccount = AccountStore.getMyAccounts().length === 0;
+        let firstAccount = true; //AccountStore.getMyAccounts().length === 0;
         let valid = this.state.validAccountName;
         if (!WalletDb.getWallet()) {
             valid = valid && this.state.validPassword;
@@ -301,7 +301,7 @@ class CreateAccountPassword extends React.Component {
         let {registrar_account, advanced_account_registrar} = this.state;
 
         let my_accounts = AccountStore.getMyAccounts();
-        let firstAccount = my_accounts.length === 0;
+        let firstAccount = true; //my_accounts.length === 0;
         let valid = this.isValid();
         let isLTM = false;
         let registrar = registrar_account
@@ -588,7 +588,7 @@ class CreateAccountPassword extends React.Component {
 
     _renderAccountCreateText() {
         let my_accounts = AccountStore.getMyAccounts();
-        let firstAccount = my_accounts.length === 0;
+        let firstAccount = true; //my_accounts.length === 0;
 
         return (
             <div>

@@ -1621,9 +1621,8 @@ class AccountVoting extends React.Component {
                                                     </div>
                                                 </th>
 
-                                                {workerTableIndex === 2 ||
-                                                workerTableIndex ===
-                                                    0 ? null : (
+                                                {workerTableIndex ===
+                                                0 ? null : (
                                                     <th
                                                         style={{
                                                             textAlign: "right"

@@ -177,7 +177,12 @@ class SignedMessageAction {
                             .get("options")
                             .get("memo_key");
                         // The 1s are base58 for all zeros (null)
-                        if (/111111111111111111111/.test(memo_from_public)) {
+                        if (
+                            /111111111111111111111/.test(memo_from_public) ||
+                            /6FUsQ2hYRj1JSvabewWfUWTXyoDq6btmfLFjmXwby5GJgzEvT5/.test(
+                                memo_from_public
+                            )
+                        ) {
                             memo_from_public = null;
                         }
                         let memo_from_privkey;

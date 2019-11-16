@@ -20,7 +20,7 @@ import {Asset, Price} from "common/MarketClasses";
  *     base_amount: the ammount of asset
  *     quote_asset:
  *     quote_amount: the ammount of asset
- *
+ *     eric price
  */
 
 class FormattedPrice extends React.Component {
@@ -192,8 +192,8 @@ class FormattedPrice extends React.Component {
                 className={noPopOver ? "clickable inline-block" : ""}
                 onClick={noPopOver ? this.onFlip.bind(this) : null}
             >
-                <AssetName name={quote.get("symbol")} />/
-                <AssetName name={base.get("symbol")} />
+                <AssetName name={base.get("symbol")} />/
+                <AssetName name={quote.get("symbol")} />
             </span>
         );
 

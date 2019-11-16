@@ -173,7 +173,7 @@ class Footer extends React.Component {
                                 )}
                                 <span style={updateStyles}>
                                     <Translate content="footer.title" />
-                                    <span> V1.0.0</span>
+                                    <span> V2019.11.10</span>
                                     {/* <span className="version">{version}</span> */}
                                 </span>
 

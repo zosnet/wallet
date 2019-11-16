@@ -24,7 +24,7 @@ class AccountCoupon extends React.Component {
     _initCoupon(accountId) {
         console.log("accountId:", accountId);
         this.getAccountCoupon(accountId).then(res => {
-            console.log("res:", res);
+            //console.log("res:", res);
             if (res) {
                 this.setState({couponAmount: res["amount"]});
                 this.setState({canReceiveCoupon: res["canReceiveCoupon"]});
@@ -42,7 +42,7 @@ class AccountCoupon extends React.Component {
     claimCoupon(account_id) {
         console.log("account_id:", account_id);
         ApplicationApi.account_coupon(account_id).then(res => {
-            console.log("res:", res);
+            //console.log("res:", res);
             setTimeout(() => {
                 this._initCoupon(account_id);
             }, 3000);

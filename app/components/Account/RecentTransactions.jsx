@@ -133,14 +133,16 @@ class RecentTransactions extends React.Component {
                     textContent(cn[0]),
                     textContent(cn[1]),
                     textContent(cn[2]),
-                    textContent(cn[3])
+                    textContent(cn[3]),
+                    textContent(cn[4]),
+                    textContent(cn[5])
                 ].join(",");
             }
             var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
             var today = new Date();
             saveAs(
                 blob,
-                "btshist-" +
+                "zosoperations-" +
                     today.getFullYear() +
                     "-" +
                     ("0" + (today.getMonth() + 1)).slice(-2) +
@@ -275,13 +277,16 @@ class RecentTransactions extends React.Component {
             ? history.slice(0, limit).map(o => {
                   return (
                       <Operation
-                          includeOperationId={true}
+                          includeOperationId={this.props.includeOperationId}
+                          includeHeight={this.props.includeHeight}
+                          includeTrxid={this.props.includeTrxid}
                           operationId={o.id}
                           style={alignLeft}
                           key={o.id}
                           op={o.op}
                           result={o.result}
                           block={o.block_num}
+                          trxid={o.trxid}
                           current={current_account_id}
                           hideFee
                           inverted={false}
@@ -446,13 +451,25 @@ class RecentTransactions extends React.Component {
                         >
                             <thead>
                                 <tr>
-                                    <th
-                                        style={{
-                                            paddingLeft: 15
-                                        }}
-                                    >
-                                        <Translate content="account.transactions.id" />
-                                    </th>
+                                    {!this.props.includeOperationId ? null : (
+                                        <th
+                                            style={{
+                                                paddingLeft: 15
+                                            }}
+                                        >
+                                            <Translate content="account.transactions.id" />
+                                        </th>
+                                    )}
+                                    {!this.props.includeHeight ? null : (
+                                        <th style={alignLeft}>
+                                            <Translate content="account.transactions.height" />
+                                        </th>
+                                    )}
+                                    {!this.props.includeTrxid ? null : (
+                                        <th style={alignLeft}>
+                                            <Translate content="account.transactions.trxid" />
+                                        </th>
+                                    )}
                                     {compactView ? null : (
                                         <th style={alignLeft}>
                                             <Translate content="account.transactions.type" />
@@ -485,6 +502,8 @@ class RecentTransactions extends React.Component {
                                     <div>OPERATION</div>
                                     <div>MEMO</div>
                                     <div>AMOUNT</div>
+                                    <div>TRXID</div>
+                                    <div>HEIGHT</div>
                                 </div>
                                 {history.map(o => {
                                     return (
@@ -493,6 +512,7 @@ class RecentTransactions extends React.Component {
                                             op={o.op}
                                             result={o.result}
                                             block={o.block_num}
+                                            trxid={o.trxid}
                                             inverted={false}
                                             csvExportMode
                                         />

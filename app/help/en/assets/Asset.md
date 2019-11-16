@@ -38,7 +38,8 @@ Explain:：
 2. The legal currency and digital currency attributes cannot exist at the same time. Applying (cancelling) the legal currency -> will automatically  cancel (become) the digital currency
 3. The loanable and pledged attributes cannot exist at the same time, the application can be borrowed (collateralizable)->Please cancel another attribute to be mortgaged (borrowable)
 4. The digital currency can be mortgaged or borrowable, and the legal currency cannot be mortgaged.
-5. Please carefully change the digital currency properties
+5. The sell currency can be sell or by.
+6. Please carefully change the digital currency properties
 
 
 [# asset_coupon]

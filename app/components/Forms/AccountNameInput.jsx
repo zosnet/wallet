@@ -145,49 +145,49 @@ class AccountNameInput extends React.Component {
         return true;
     }
 
-    is_account_name_error(value, allow_too_short) {
-        var i, label, len, length, ref, suffix;
-        if (allow_too_short == null) {
-            allow_too_short = false;
-        }
-        suffix = "suffix.";
-        if (value == null || value.length === 0) {
-            return suffix + "empty";
-        }
-        length = value.length;
-        if (!allow_too_short && length < 3) {
-            return suffix + "longer";
-        }
-        if (length > 63) {
-            return suffix + "shorter";
-        }
-        if (value.indexOf("zos") > -1) {
-            return suffix + "contain";
-        }
-        if (/\./.test(value)) {
-            suffix = "segment.";
-        }
-        ref = value.split(".");
-        for (i = 0, len = ref.length; i < len; i++) {
-            label = ref[i];
-            if (!/^[~a-z]/.test(label)) {
-                return suffix + "start";
-            }
-            if (!/^[~a-z0-9-]*$/.test(label)) {
-                return suffix + "only";
-            }
-            if (/--/.test(label)) {
-                return suffix + "oneDash";
-            }
-            if (!/[a-z0-9]$/.test(label)) {
-                return suffix + "end";
-            }
-            if (!(label.length >= 1)) {
-                return suffix + "longer";
-            }
-        }
-        return null;
-    }
+    // is_account_name_error(value, allow_too_short) {
+    //     var i, label, len, length, ref, suffix;
+    //     if (allow_too_short == null) {
+    //         allow_too_short = false;
+    //     }
+    //     suffix = "suffix.";
+    //     if (value == null || value.length === 0) {
+    //         return suffix + "empty";
+    //     }
+    //     length = value.length;
+    //     if (!allow_too_short && length < 3) {
+    //         return suffix + "longer";
+    //     }
+    //     if (length > 63) {
+    //         return suffix + "shorter";
+    //     }
+    //     if (value.indexOf("zos") > -1) {
+    //         return suffix + "contain";
+    //     }
+    //     if (/\./.test(value)) {
+    //         suffix = "segment.";
+    //     }
+    //     ref = value.split(".");
+    //     for (i = 0, len = ref.length; i < len; i++) {
+    //         label = ref[i];
+    //         if (!/^[~a-z]/.test(label)) {
+    //             return suffix + "start";
+    //         }
+    //         if (!/^[~a-z0-9-]*$/.test(label)) {
+    //             return suffix + "only";
+    //         }
+    //         if (/--/.test(label)) {
+    //             return suffix + "oneDash";
+    //         }
+    //         if (!/[a-z0-9]$/.test(label)) {
+    //             return suffix + "end";
+    //         }
+    //         if (!(label.length >= 1)) {
+    //             return suffix + "longer";
+    //         }
+    //     }
+    //     return null;
+    // }
 
     validateAccountName(value) {
         if (value === "") {
@@ -196,8 +196,14 @@ class AccountNameInput extends React.Component {
             );
         } else {
             let error = null;
-            let localePaths = this.is_account_name_error(value);
+            let localePaths = ChainValidation.is_account_name_error(
+                value,
+                false,
+                3,
+                63
+            );
             if (localePaths) {
+                //console.log("error name", localePaths);
                 let localePath = localePaths.split(".");
                 if (localePath.length == 2) {
                     error = counterpart.translate(
@@ -210,6 +216,7 @@ class AccountNameInput extends React.Component {
             }
             this.state.error = error;
         }
+        value = value.trim();
         this.state.warning = null;
         let is_cheap_name = this.is_cheap_name(value);
 

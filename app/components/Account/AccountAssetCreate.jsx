@@ -370,6 +370,13 @@ class AccountAssetCreate extends React.Component {
                 }
                 update.description[value] = e.target.value;
                 break;
+            case "real_asset_sub":
+                if (e.target.value.length > 20) {
+                    updateState = false;
+                    return;
+                }
+                update.description[value] = e.target.value;
+                break;
             case "market":
                 update.description[value] = e;
                 break;
@@ -1290,6 +1297,18 @@ class AccountAssetCreate extends React.Component {
                                             onChange={this._onUpdateDescription.bind(
                                                 this,
                                                 "real_asset"
+                                            )}
+                                        />
+                                        <input
+                                            type="text"
+                                            rows="1"
+                                            value={
+                                                update.description
+                                                    .real_asset_sub
+                                            }
+                                            onChange={this._onUpdateDescription.bind(
+                                                this,
+                                                "real_asset_sub"
                                             )}
                                         />
                                     </label>

@@ -64,7 +64,10 @@ class AccountAssets extends React.Component {
             ASSET_CASH: 0x00000001, //ASSET_CASH   法币
             ASSET_LENDER: 0x0000002, //ASSET_LENDER 可抵押
             ASSET_LOAN: 0x00000008, // ASSET_LOAN  可借贷
-            ASSET_BIT: 0x00000040 // ASSET_BIT   数字货币
+            ASSET_BIT: 0x00000040, // ASSET_BIT   数字货币
+            ASSET_SELL: 0x00000080, // ASSET_SELL   可交易
+            ASSET_LOCKTOKEN: 0x00000100, //
+            ASSET_LOCKNODE: 0x00000200 //
         };
 
         this._searchAccounts = debounce(this._searchAccounts, 150);
@@ -124,10 +127,10 @@ class AccountAssets extends React.Component {
                         //console.log("setState.committeeAssets:",committeeAssets)
                         let ids = [];
                         assetList.map(a => {
-                            console.log("a:", a);
+                            // console.log("a:", a);
                             ids.push(a.get("dynamic_asset_data_id"));
                         });
-                        console.log("ids:", ids);
+                        // console.log("ids:", ids);
                         this._getInnerDynamicObjects(ids);
                     });
                 }
@@ -366,6 +369,62 @@ class AccountAssets extends React.Component {
                                 paddingRight: 0
                             }}
                         >
+                            {asset.bitasset_data_id ? (
+                                <button
+                                    onClick={this._assetPropertyClick.bind(
+                                        this,
+                                        this.assetproperty.ASSET_SELL,
+                                        asset.issuer,
+                                        asset.id,
+                                        asset.symbol,
+                                        asset.uasset_property
+                                    )}
+                                    className="button"
+                                >
+                                    {propertys.asset_sell ? ( //判断是否为可交易属性
+                                        <Translate content="transaction.trxTypes.cancel_asset_sell" /> //取消可交易
+                                    ) : (
+                                        <Translate content="transaction.trxTypes.apply_asset_sell" />
+                                    ) //申请为可交易
+                                    }
+                                </button>
+                            ) : null}
+                        </td>
+
+                        <td
+                            style={{
+                                textAlign: "right",
+                                paddingRight: 0
+                            }}
+                        >
+                            {asset.bitasset_data_id ? (
+                                <button
+                                    onClick={this._assetPropertyClick.bind(
+                                        this,
+                                        this.assetproperty.ASSET_LOCKTOKEN,
+                                        asset.issuer,
+                                        asset.id,
+                                        asset.symbol,
+                                        asset.uasset_property
+                                    )}
+                                    className="button"
+                                >
+                                    {propertys.asset_locktoken ? ( //判断是否为可交易属性
+                                        <Translate content="transaction.trxTypes.cancel_asset_locktoken" /> //取消可交易
+                                    ) : (
+                                        <Translate content="transaction.trxTypes.apply_asset_locktoken" />
+                                    ) //申请为可交易
+                                    }
+                                </button>
+                            ) : null}
+                        </td>
+
+                        <td
+                            style={{
+                                textAlign: "right",
+                                paddingRight: 0
+                            }}
+                        >
                             {asset.bitasset_data_id ? ( //智能资产
                                 <button
                                     onClick={this._assetPropertyClick.bind(
@@ -486,7 +545,7 @@ class AccountAssets extends React.Component {
             );
         }
 
-        console.log("assetsList:", assetsList);
+        // console.log("assetsList:", assetsList);
         if (assetsList.length) {
             assets = assets.clear();
             assetsList.forEach(a => {

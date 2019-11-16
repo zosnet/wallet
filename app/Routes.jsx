@@ -181,6 +181,14 @@ const routes = (
             }}
         />
         <Route
+            path="/explorer/balances"
+            getComponent={(location, cb) => {
+                System.import("components/Explorer/BalancesSort")
+                    .then(loadRoute(cb))
+                    .catch(errorLoading);
+            }}
+        />
+        <Route
             path="/explorer/block/:height"
             getComponent={(location, cb) => {
                 System.import("components/Blockchain/BlockContainer")

@@ -25,13 +25,19 @@ module.exports = {
         asset_cash: 0x00000001, //ASSET_CASH   法币
         asset_lender: 0x0000002, //ASSET_LENDER 可抵押
         asset_loan: 0x00000008, // ASSET_LOAN  可借贷
-        asset_bit: 0x00000040 // ASSET_BIT   数字货币
+        asset_bit: 0x00000040, // ASSET_BIT   数字货币
+        asset_sell: 0x00000080, // ASSET_SELL   可交易
+        asset_locktoken: 0x00000100, //
+        asset_locknode: 0x00000200 //
     },
     uasset_property_mask: [
         "asset_cash",
         "asset_lender",
         "asset_loan",
-        "asset_bit"
+        "asset_bit",
+        "asset_sell",
+        "asset_locktoken",
+        "asset_locknode"
     ]
 };
 
