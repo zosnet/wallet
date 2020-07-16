@@ -143,7 +143,7 @@
         "intro.js": "^2.8.0-alpha.1",
         "jdenticon": "git+https://github.com/cryptonomex/jdenticon.git",
         "js-sha256": "^0.2.3",
-        "lodash": "^3.10.1",
+        "lodash": "^4.17.19",
         "lodash-es": "^3.10.1",
         "lzma": "2.1.6",
         "moment": "^2.20.1",
